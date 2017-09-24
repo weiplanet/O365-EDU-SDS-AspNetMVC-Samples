@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using CsvHelper;
+using Newtonsoft.Json;
 using OneRosterProviderDemo.Validators;
 using OneRosterProviderDemo.Vocabulary;
 using System;
@@ -161,6 +162,44 @@ namespace OneRosterProviderDemo.Models
 
             writer.WriteEndObject();
             writer.Flush();
+        }
+
+        public static new void CsvHeader(CsvWriter writer)
+        {
+            BaseModel.CsvHeader(writer);
+
+            writer.WriteField("title");
+            writer.WriteField("grades");
+            writer.WriteField("courseSourcedId");
+            writer.WriteField("classCode");
+            writer.WriteField("classType");
+            writer.WriteField("location");
+            writer.WriteField("schoolSourcedId");
+            writer.WriteField("termSourcedIds");
+            writer.WriteField("subjects");
+            writer.WriteField("subjectCodes");
+            writer.WriteField("periods");
+
+            writer.NextRecord();
+        }
+
+        public new void AsCsvRow(CsvWriter writer, bool bulk = true)
+        {
+            base.AsCsvRow(writer, bulk);
+
+            writer.WriteField(Title);
+            writer.WriteField(String.Join(',', Grades));
+            writer.WriteField(CourseId);
+            writer.WriteField(ClassCode);
+            writer.WriteField(ClassType);
+            writer.WriteField(Location);
+            writer.WriteField(SchoolOrgId);
+            writer.WriteField(String.Join(',', KlassAcademicSessions.Select(kas => kas.AcademicSessionId)));
+            writer.WriteField(String.Join(',', Subjects));
+            writer.WriteField(String.Join(',', SubjectCodes));
+            writer.WriteField(String.Join(',', Periods));
+
+            writer.NextRecord();
         }
     }
 }

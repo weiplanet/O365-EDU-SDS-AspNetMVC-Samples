@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using CsvHelper;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using OneRosterProviderDemo.Vocabulary;
 using System;
@@ -92,6 +93,34 @@ namespace OneRosterProviderDemo.Models
                 return false;
             }
             return true;
+        }
+
+        public static new void CsvHeader(CsvWriter writer)
+        {
+            BaseModel.CsvHeader(writer);
+
+            writer.WriteField("lineItemSourcedId");
+            writer.WriteField("studentSourcedId");
+            writer.WriteField("scoreStatus");
+            writer.WriteField("score");
+            writer.WriteField("scoreDate");
+            writer.WriteField("comment");
+
+            writer.NextRecord();
+        }
+
+        public new void AsCsvRow(CsvWriter writer, bool bulk = true)
+        {
+            base.AsCsvRow(writer, bulk);
+
+            writer.WriteField(LineItemId);
+            writer.WriteField(StudentUserId);
+            writer.WriteField(ScoreStatus);
+            writer.WriteField(Score);
+            writer.WriteField(ScoreDate.ToString("yyyy-MM-dd"));
+            writer.WriteField(Comment);
+
+            writer.NextRecord();
         }
     }
 }

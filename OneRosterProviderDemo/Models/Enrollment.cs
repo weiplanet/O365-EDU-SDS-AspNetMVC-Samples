@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using CsvHelper;
+using Newtonsoft.Json;
 using OneRosterProviderDemo.Vocabulary;
 using System;
 using System.ComponentModel.DataAnnotations;
@@ -77,6 +78,34 @@ namespace OneRosterProviderDemo.Models
 
             writer.WriteEndObject();
             writer.Flush();
+        }
+
+        public static new void CsvHeader(CsvWriter writer)
+        {
+            BaseModel.CsvHeader(writer);
+            writer.WriteField("classSourcedId");
+            writer.WriteField("schoolSourcedId");
+            writer.WriteField("userSourcedId");
+            writer.WriteField("role");
+            writer.WriteField("primary");
+            writer.WriteField("beginDate");
+            writer.WriteField("endDate");
+
+            writer.NextRecord();
+        }
+
+        public new void AsCsvRow(CsvWriter writer, bool bulk = true)
+        {
+            base.AsCsvRow(writer, bulk);
+            writer.WriteField(KlassId);
+            writer.WriteField(SchoolOrgId);
+            writer.WriteField(UserId);
+            writer.WriteField(Role);
+            writer.WriteField(Primary == null ? Primary.ToString() : "");
+            writer.WriteField(BeginDate.ToString("yyyy-MM-dd"));
+            writer.WriteField(EndDate.ToString("yyyy-MM-dd"));
+
+            writer.NextRecord();
         }
     }
 }

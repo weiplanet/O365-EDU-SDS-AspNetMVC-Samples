@@ -1,9 +1,16 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.OpenIdConnect;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.IdentityModel.Clients.ActiveDirectory;
 using OneRosterProviderDemo.Models;
+using System;
 
 namespace OneRosterProviderDemo
 {
@@ -20,6 +27,19 @@ namespace OneRosterProviderDemo
         public void ConfigureServices(IServiceCollection services)
         {
             Vocabulary.SubjectCodes.Initialize();
+
+            services.AddAuthentication(sharedOptions =>
+            {
+                sharedOptions.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                sharedOptions.DefaultChallengeScheme = OpenIdConnectDefaults.AuthenticationScheme;
+                sharedOptions.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+            })
+            .AddCookie()
+            .AddOpenIdConnect(opts =>
+            {
+                Configuration.GetSection("AzureAd").Bind(opts);
+                opts.SaveTokens = true;
+            });
             services.AddDbContext<ApiContext>(
                 options => options.UseSqlite(Configuration.GetConnectionString("OneRosterProviderDemoEF"))
             );
@@ -34,6 +54,8 @@ namespace OneRosterProviderDemo
                 app.UseDeveloperExceptionPage();
             }
 
+            app.UseStaticFiles();
+            app.UseAuthentication();
             app.UseOauthMessageSigning();
             app.UseMvc();
         }

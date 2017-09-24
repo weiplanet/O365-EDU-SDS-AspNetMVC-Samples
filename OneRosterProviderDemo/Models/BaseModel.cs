@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Primitives;
+﻿using CsvHelper;
+using Microsoft.Extensions.Primitives;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using OneRosterProviderDemo.Exceptions;
@@ -302,6 +303,30 @@ namespace OneRosterProviderDemo.Models
                 return (string)value;
             }
             return defaultValue;
+        }
+
+        public static void CsvHeader(CsvWriter writer)
+        {
+            writer.WriteField("sourcedId");
+
+            writer.WriteField("status");
+            writer.WriteField("dateLastModified");
+        }
+
+        public void AsCsvRow(CsvWriter writer, bool bulk = true)
+        {
+            writer.WriteField(Id);
+
+            if (bulk)
+            {
+                writer.WriteField("");
+                writer.WriteField("");
+            }
+            else
+            {
+                writer.WriteField(Status);
+                writer.WriteField(UpdatedAt.ToString("yyyy-MM-dd"));
+            }
         }
     }
 }

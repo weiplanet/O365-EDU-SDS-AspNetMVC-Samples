@@ -355,6 +355,15 @@ namespace OneRosterProviderDemo.Models
                     Status = Vocabulary.StatusType.active,
                     KlassId = "class-1",
                     AcademicSessionId = "academic-session-1"
+                },
+                new KlassAcademicSession()
+                {
+                    Id = "class-academic-session-2",
+                    UpdatedAt = DateTime.Now,
+                    CreatedAt = DateTime.Now,
+                    Status = Vocabulary.StatusType.active,
+                    KlassId = "class-2",
+                    AcademicSessionId = "academic-session-1"
                 }
             );
 

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using CsvHelper;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Primitives;
 using Newtonsoft.Json;
 using OneRosterProviderDemo.Validators;
@@ -164,6 +165,54 @@ namespace OneRosterProviderDemo.Models
 
             writer.WriteEndObject();
             writer.Flush();
+        }
+
+
+
+        public static new void CsvHeader(CsvWriter writer)
+        {
+            BaseModel.CsvHeader(writer);
+            
+            writer.WriteField("enabledUser");
+            writer.WriteField("orgSourcedIds");
+            writer.WriteField("role");
+            writer.WriteField("username");
+            writer.WriteField("userIds");
+            writer.WriteField("givenName");
+            writer.WriteField("familyName");
+            writer.WriteField("middleName");
+            writer.WriteField("identifier");
+            writer.WriteField("email");
+            writer.WriteField("sms");
+            writer.WriteField("phone");
+            writer.WriteField("agentSourcedIds");
+            writer.WriteField("grades");
+            writer.WriteField("password");
+
+            writer.NextRecord();
+        }
+
+        public new void AsCsvRow(CsvWriter writer, bool bulk = true)
+        {
+            base.AsCsvRow(writer, bulk);
+            
+            writer.WriteField(EnabledUser);
+            writer.WriteField(String.Join(',', UserOrgs.Select(uo => uo.OrgId)));
+            writer.WriteField(Role);
+            writer.WriteField(Username);
+            writer.WriteField(UserIds == null ? "" : String.Join(',', UserIds.Select(ui => $"{{{ui.Type}:{ui.Identifier}}}")));
+            writer.WriteField(GivenName);
+            writer.WriteField(FamilyName);
+            writer.WriteField(MiddleName);
+            writer.WriteField(Identifier);
+            writer.WriteField(Email);
+            writer.WriteField(SMS);
+            writer.WriteField(Phone);
+            writer.WriteField(String.Join(',', UserAgents.Select(ua => ua.AgentUserId)));
+            writer.WriteField(String.Join(',', Grades));
+            writer.WriteField(Password);
+
+            writer.NextRecord();
         }
     }
 }
