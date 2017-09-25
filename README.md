@@ -12,6 +12,7 @@ Specifically, it targets requirements for:
 * [Prerequisites](#prerequisites)
 * [Build and debug locally](#build-and-debug-locally)
 * [Deploy the sample to Azure](#deploy-the-sample-to-azure)
+* [Sync with SDS](#sync-with-sds)
 * [Understand the code](#understand-the-code)
 * [Supported OneRoster Endpoints](#supported-oneroster-endpoints)
 * [Unsupported Features](#unsupported-features)
@@ -25,6 +26,8 @@ The sample demonstrates:
 * Data models supporting [OneRoster entities](https://www.imsglobal.org/oneroster-v11-final-specification#_Toc480452006)
 * Action controllers supporting [OneRoster service endpoints](https://www.imsglobal.org/oneroster-v11-final-specification#_Toc480451989)
 * Authorization middleware supporting [OneRoster Core Security](https://www.imsglobal.org/oneroster-v11-final-specification#_Toc480452001)
+* Generation of [OneRoster CSV bundles](https://www.imsglobal.org/oneroster-v11-final-csv-tables)
+* Consumption of [SDS Profile Management APIs](https://github.com/OfficeDev/O365-EDU-Tools/tree/master/SDSProfileManagementDocs) to create and start SDS sync profiles
 
 OneRosterProviderDemo is based on ASP.NET Core Web.
 
@@ -33,13 +36,56 @@ OneRosterProviderDemo is based on ASP.NET Core Web.
 **Deploying and running this sample requires**:
 
 * An Azure subscription with permissions to register a new application, and deploy the web app.
+* An O365 Education tenant with Microsoft School Data Sync enabled
 * One of the following browsers: Edge, Internet Explorer 9, Safari 5.0.6, Firefox 5, Chrome 13, or a later version of one of these browsers.
 * A tool to generate OAuth1 signatures, such as [Postman](https://www.getpostman.com/)
-
-    Additionally: Developing/running this sample locally requires the following:  
-
 * Visual Studio 2017 (any edition), [Visual Studio 2017 Community](https://www.visualstudio.com/thank-you-downloading-visual-studio/?sku=Community) is available for free.
 * Familiarity with C#, .NET Web applications and web services.
+
+## Register the application in Azure Active Directory
+
+1. Sign into the new azure portal: [https://portal.azure.com/](https://portal.azure.com/).
+
+2. Click **Azure Active Directory** -> **App registrations** -> **+Add**.
+
+   ![](Images/aad-create-app-01.png)
+
+3. Input a **Name**, and select **Web app / API** as **Application Type**.
+
+   Input **Sign-on URL**: https://localhost:44344/
+
+   ![](Images/aad-create-app-02.png)
+
+   Click **Create**.
+
+4. Once completed, the app will show in the list.
+
+   ![](/Images/aad-create-app-03.png)
+
+5. Click it to view its details.
+
+   ![](/Images/aad-create-app-04.png)
+
+6. Click **All settings**, if the setting window did not show.
+
+   * Click **Properties**, then set **Multi-tenanted** to **Yes**.
+
+     Copy aside **Application ID**, then Click **Save**.
+
+   * Click **Required permissions**. Add the following permissions:
+
+     | API                            | Delegated Permissions                    |
+     | ------------------------------ | ---------------------------------------- |
+     | Microsoft Graph                | Read directory data<br>Read and write directory data<br>Access directory as the signed in user<br>Read education app settings<br>Manage education app settings |
+     | Windows Azure Active Directory | Sign in and read user profile |
+
+   * Click **Keys**, then add a new key:
+
+     ![](Images/aad-create-app-07.png)
+
+     Click **Save**, then copy aside the **VALUE** of the key.
+
+   Close the Settings window.
 
 ## Build and debug locally
 
@@ -49,9 +95,18 @@ This project can be opened with the edition of Visual Studio 2017 you already ha
 
 Debug **OneRosterProviderDemo**:
 
-1. In the Package Manager Console, run the command `EntityFrameworkCore\Update-Database` to generate the initial database.
-2. Set **OneRosterProviderDemo** as StartUp project, and press F5.
-3. Visit `/seeds` to populate your database with sample entities.
+1. Configure **appsettings.json**.
+
+   ![](Images/web-app-config.png)
+
+   - **AzureAd:Authority**: "https://login.microsoftonline.com/{your-ad-tenant}.onmicrosoft.com/"
+   - **AzureAd:ClientId**: use the Client Id of the app registration you created earlier.
+   - **AzureAd:ClientSecret**: use the Key value of the app registration you created earlier.
+   - **AzureDomain**: use your AD tenant domain, which should agree with the **AzureAd:Authority** entry
+
+2. In the Package Manager Console, run the command `EntityFrameworkCore\Update-Database` to generate the initial database.
+3. Set **OneRosterProviderDemo** as StartUp project, and press F5.
+4. Visit `/seeds` to populate your database with sample entities.
 
 ## Deploy the sample to Azure
 
@@ -69,6 +124,42 @@ Debug **OneRosterProviderDemo**:
 2. Select **Build > Publish OneRosterProviderDemo**
 3. Click **Publish**
 
+**Add REPLY URL to the app registration**
+
+1. After the deployment, open the resource group in Azure Portal
+2. Click the web app.
+
+   ![](Images/azure-web-app.png)
+
+   Copy the URL aside and change the schema to **https**, and add **/signin-oidc** to the end. This is the reply URL and will be used in next step.
+
+3. Navigate to the app registration in the new azure portal, then open the setting windows.
+
+   Add the reply URL:
+
+   ![](Images/aad-add-reply-url.png)
+
+   > Note: to debug the sample locally, make sure that https://localhost:44344/signin-oidc is in the reply URLs.
+
+4. Click **SAVE**.
+
+## Sync with SDS
+
+There are two synchronization options, via the OneRoster REST endpoints, and by uploading [SDS compliant CSV files](https://support.office.com/en-us/article/CSV-files-for-School-Data-Sync-9f3c3c2b-7364-4f6e-a959-e8538feead70).
+
+### Sync with OneRoster REST
+1. Visit your deploy at /sds
+2. Sign in with an admin account on your education tenant.
+3. Verify that the "OneRoster endpoint" value agrees with your deployed instance
+  - Note that this will not work unless your URL is publicly accessible
+4. Click the "Sync via OneRoster REST" button
+
+### Sync with SDS CSV
+1. Visit your deploy at /sds
+2. Sign in with an admin account on your education tenant.
+3. Select your SDS CSV files
+4. Click the "Sync via SDS CSV" button
+
 ## Understand the code
 
 ### Introduction
@@ -77,11 +168,13 @@ This web application is based on an ASP.NET Core Web project template.
 
 ### Authorization
 
+#### OneRoster Endpoints
 The `Middlewares/OAuth1.cs` file defines a middleware that validates the OAuth1 signature for each incoming request with a OneRoster route.  This file also contains the hard-coded client ID and secret.
-
 The `Startup.cs` file configures the app to use this middleware.
-
 While the OneRoster v1.1 spec allows for OAuth2 bearer token authorization, it is not supported in this sample.
+
+#### SDS Profile Management
+The `Startup.cs` file configures the app to use .NET Core's OpenIDConnect (oidc) library.  This flow is handled by `AccountController`.
 
 ### Data Models
 
