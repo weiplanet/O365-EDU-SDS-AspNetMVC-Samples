@@ -1,4 +1,9 @@
-﻿using CsvHelper;
+﻿/*
+ * Copyright (c) Microsoft Corporation. All rights reserved. Licensed under the MIT license.
+* See LICENSE in the project root for license information.
+*/
+
+using CsvHelper;
 using Newtonsoft.Json;
 using OneRosterProviderDemo.Vocabulary;
 using System;
