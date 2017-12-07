@@ -1,4 +1,9 @@
-﻿using Microsoft.AspNetCore.Authentication.Cookies;
+﻿/*
+ * Copyright (c) Microsoft Corporation. All rights reserved. Licensed under the MIT license.
+* See LICENSE in the project root for license information.
+*/
+
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
