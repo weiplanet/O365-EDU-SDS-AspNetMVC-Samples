@@ -18,6 +18,7 @@ using Newtonsoft.Json.Linq;
 using Microsoft.AspNetCore.Http;
 using System.Collections.Generic;
 using Microsoft.WindowsAzure.Storage.Blob;
+using Sds;
 
 namespace OneRosterProviderDemo.Controllers
 {
@@ -27,6 +28,7 @@ namespace OneRosterProviderDemo.Controllers
     {
         private static readonly HttpClient Client = new HttpClient();
         private readonly IConfiguration _config;
+        private SdsManager manager;
 
         public SdsController(IConfiguration config)
         {
@@ -48,9 +50,14 @@ namespace OneRosterProviderDemo.Controllers
                 return BadRequest();
             }
 
+            if (manager == null)
+            {
+                manager = new SdsManager(await GetAccessTokenAsync());
+            }
+
             var profile = await GetProfileAsync("csv");
             var profileId = (string)profile["id"];
-            var uploadSas = await GetCsvUploadUrl(profileId);
+            var uploadSas = await manager.GetCsvUploadUrl(profileId);
 
             await UploadToUrl(files, uploadSas);
             await StartCsvSyncSafely(profileId);
@@ -64,6 +71,10 @@ namespace OneRosterProviderDemo.Controllers
         [Route("rest")]
         public async Task<IActionResult> RestAsync()
         {
+            if (manager == null)
+            {
+                manager = new SdsManager(await GetAccessTokenAsync());
+            }
             var profile = await GetProfileAsync("rest");
             ViewBag.Message = $"OneRoster REST connector has id {profile["id"]} and status {profile["state"]}";
             return View("Rest");
@@ -73,7 +84,7 @@ namespace OneRosterProviderDemo.Controllers
         {
             // find existing matching profile
             var profileName = $"OneRoster{profileType.ToUpper()}Profile";
-            HttpResponseMessage res = await QueryGraphAsync("/testsds/synchronizationProfiles");
+            HttpResponseMessage res = await manager.QueryAllProfilesAsync();
             var profiles = (JArray)JObject.Parse(await res.Content.ReadAsStringAsync())["value"];
 
             foreach (var profile in profiles)
@@ -85,7 +96,7 @@ namespace OneRosterProviderDemo.Controllers
             }
 
             // create new profile
-            HttpResponseMessage res2 = await PostGraphAsync("/testsds/synchronizationProfiles", await GenerateProfileAsync(profileType));
+            HttpResponseMessage res2 = await manager.PostProfileAsync(await GenerateProfileAsync(profileType));
             return JObject.Parse(await res2.Content.ReadAsStringAsync());
         }
 
@@ -105,7 +116,7 @@ namespace OneRosterProviderDemo.Controllers
             var profileIsReady = false;
             do
             {
-                var res = await QueryGraphAsync($"/testsds/synchronizationProfiles/{profileId}");
+                var res = await manager.QueryProfileAsync(profileId);
                 var responseText = await res.Content.ReadAsStringAsync();
                 profileIsReady = (string)JObject.Parse(responseText)["state"] == "provisioned";
 
@@ -114,43 +125,7 @@ namespace OneRosterProviderDemo.Controllers
                     await Task.Delay(5000);
                 }
             } while (!profileIsReady);
-            await StartCsvSync(profileId);
-        }
-
-        private async Task StartCsvSync(string profileId)
-        {
-            var req = new HttpRequestMessage(HttpMethod.Post, $"https://graph.microsoft.com/testsds/synchronizationProfiles/{profileId}/start");
-            req.Headers.Authorization = new AuthenticationHeaderValue("Bearer", await GetAccessTokenAsync());
-            var response = await Client.SendAsync(req);
-            var responseText = await response.Content.ReadAsStringAsync();
-        }
-
-        private async Task<string> GetCsvUploadUrl(string profileId)
-        {
-            var res = await QueryGraphAsync($"/testsds/synchronizationProfiles/{profileId}/uploadUrl");
-            var parsed = JObject.Parse(await res.Content.ReadAsStringAsync());
-            return (string)parsed["value"];
-        }
-
-        private async Task<HttpResponseMessage> PostGraphAsync(string relativeUrl, string requestBody)
-        {
-            var req = new HttpRequestMessage(HttpMethod.Post, $"https://graph.microsoft.com/{relativeUrl}")
-            {
-                Content = new StringContent(requestBody, Encoding.UTF8, "application/json")
-            };
-
-            req.Headers.Authorization = new AuthenticationHeaderValue("Bearer", await GetAccessTokenAsync());
-
-            return await Client.SendAsync(req);
-        }
-
-        private async Task<HttpResponseMessage> QueryGraphAsync(string relativeUrl)
-        {
-            var req = new HttpRequestMessage(HttpMethod.Get, $"https://graph.microsoft.com/{relativeUrl}");
-
-            req.Headers.Authorization = new AuthenticationHeaderValue("Bearer", await GetAccessTokenAsync());
-
-            return await Client.SendAsync(req);
+            await manager.StartCsvSync(profileId);
         }
 
         private async Task<string> GetAccessTokenAsync()
@@ -257,7 +232,7 @@ namespace OneRosterProviderDemo.Controllers
         // https://developer.microsoft.com/en-us/graph/docs/api-reference/v1.0/api/subscribedsku_list
         private async Task<Tuple<string, string>> GetOfficeSkusAsync()
         {
-            HttpResponseMessage res = await QueryGraphAsync("/v1.0/subscribedSkus");
+            HttpResponseMessage res = await manager.QuerySkusAsync();
 
             var skus = (JArray)JObject.Parse(await res.Content.ReadAsStringAsync())["value"];
 
