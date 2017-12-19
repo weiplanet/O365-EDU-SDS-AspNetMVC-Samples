@@ -96,8 +96,13 @@ namespace OneRosterProviderDemo.Controllers
             }
 
             // create new profile
-            HttpResponseMessage res2 = await manager.PostProfileAsync(await GenerateProfileAsync(profileType));
-            return JObject.Parse(await res2.Content.ReadAsStringAsync());
+            var generatedProfile = await GenerateProfileAsync(profileType);
+            System.Diagnostics.Debug.WriteLine("===================== BEGIN GENERATED PROFILE =====================");
+            System.Diagnostics.Debug.WriteLine(generatedProfile);
+            System.Diagnostics.Debug.WriteLine("===================== END GENERATED PROFILE =====================");
+            HttpResponseMessage res2 = await manager.PostProfileAsync(generatedProfile);
+            var res2String = await res2.Content.ReadAsStringAsync();
+            return JObject.Parse(res2String);
         }
 
         private async Task UploadToUrl(List<IFormFile> files, string sas)
@@ -157,7 +162,7 @@ namespace OneRosterProviderDemo.Controllers
                 }
                 else
                 {
-                    writer.WriteValue("#microsoft.graph.oneRosterApiDataProvider");
+                    writer.WriteValue("#microsoft.graph.educationcsvdataprovider");
 
                     writer.WritePropertyName("connectionUrl");
                     writer.WriteValue($"{(Request.IsHttps ? "https" : "http")}://{Request.Host}/ims/oneroster/v1p1");
