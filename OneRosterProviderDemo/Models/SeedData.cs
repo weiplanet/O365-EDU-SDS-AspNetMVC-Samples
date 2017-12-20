@@ -441,6 +441,79 @@ namespace OneRosterProviderDemo.Models
                 }
             );
 
+            context.Resources.AddRange(
+                new Resource()
+                {
+                    Id = "resource-1",
+                    UpdatedAt = DateTime.Now,
+                    CreatedAt = DateTime.Now,
+                    Status = Vocabulary.StatusType.active,
+                    Title = "Coffee Chemistry (5th Edition)",
+                    VendorResourceId = "vendor-resource-1",
+                    VendorId = "vendor-1",
+                    ApplicationId = "application-1"
+                },
+                new Resource()
+                {
+                    Id = "resource-2",
+                    UpdatedAt = DateTime.Now,
+                    CreatedAt = DateTime.Now,
+                    Status = Vocabulary.StatusType.active,
+                    Title = "Espresso Dynamics (2nd Edition)",
+                    VendorResourceId = "vendor-resource-2",
+                    VendorId = "vendor-1",
+                    ApplicationId = "application-1"
+                },
+                new Resource()
+                {
+                    Id = "resource-3",
+                    UpdatedAt = DateTime.Now,
+                    CreatedAt = DateTime.Now,
+                    Status = Vocabulary.StatusType.active,
+                    Title = "Fundamentals of Cappucino Analysis (1st Edition)",
+                    VendorResourceId = "vendor-resource-3",
+                    VendorId = "vendor-2",
+                    ApplicationId = "application-1"
+                }
+            );
+
+            context.Demographics.AddRange(
+                new Demographic()
+                {
+                    Id = "demographic-1",
+                    UpdatedAt = DateTime.Now,
+                    CreatedAt = DateTime.Now,
+                    Status = Vocabulary.StatusType.active,
+                    Sex = Vocabulary.Gender.male,
+                    BirthDate = DateTime.MinValue,
+                    AmericanIndianOrAlaskaNative = true,
+                    Asian = false, 
+                    BlackOrAfricanAmerican = false,
+                    NativeHawaiianOrOtherPacificIslander = false,
+                    White = false,
+                    DemographicRaceTwoOrMoreRaces = false,
+                    HispanicOrLatinoEthnicity = false,
+                    CountryOfBirthCode = "USA",
+                    StateOfBirthAbbreviation = "AK",
+                    CityOfBirth = "Juneau", 
+                    PublicSchoolResidenceStatus = "1652"
+                },
+                new Demographic()
+                {
+                    Id = "demographic-2",
+                    UpdatedAt = DateTime.Now,
+                    CreatedAt = DateTime.Now,
+                    Status = Vocabulary.StatusType.active,
+                    Sex = Vocabulary.Gender.female,
+                    BirthDate = DateTime.MinValue,
+                    White = true,
+                    CountryOfBirthCode = "USA",
+                    StateOfBirthAbbreviation = "CA",
+                    CityOfBirth = "San Francisco", 
+                    PublicSchoolResidenceStatus = "1653"
+                }
+            );
+
             context.SaveChanges();
         }
     }

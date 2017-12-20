@@ -391,7 +391,52 @@ namespace OneRosterProviderDemo.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
+            migrationBuilder.CreateTable(
+                name: "Resources",
+                columns: table => new
+                {
+                    Id = table.Column<string>(type: "TEXT", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    Metadata = table.Column<string>(type: "TEXT", nullable: true),
+                    Status = table.Column<int>(type: "INTEGER", nullable: false),
+                    UpdatedAt = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    Title = table.Column<string>(type: "TEXT", nullable: true),
+                    VendorResourceId = table.Column<string>(type: "TEXT", nullable: false),
+                    VendorId = table.Column<string>(type: "TEXT", nullable: true),
+                    ApplicationId = table.Column<string>(type: "TEXT", nullable: true)
+                },
+                constraints: table => 
+                {
+                    table.PrimaryKey("PK_Resources", x => x.Id);
+                });
 
+            migrationBuilder.CreateTable(
+                name: "Demographics",
+                columns: table => new
+                {
+                    Id = table.Column<string>(type: "TEXT", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    Metadata = table.Column<string>(type: "TEXT", nullable: true),
+                    Status = table.Column<int>(type: "INTEGER", nullable: false),
+                    UpdatedAt = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    BirthDate = table.Column<DateTime>(type: "TEXT", nullable: true),
+                    Sex = table.Column<Vocabulary.Gender>(type: "TEXT", nullable: true),
+                    AmericanIndianOrAlaskaNative = table.Column<bool>(type: "TEXT", nullable: true),
+                    Asian = table.Column<bool>(type: "TEXT", nullable: true),
+                    BlackOrAfricanAmerican = table.Column<bool>(type: "TEXT", nullable: true),
+                    NativeHawaiianOrOtherPacificIslander = table.Column<bool>(type: "TEXT", nullable: true),
+                    White = table.Column<bool>(type: "TEXT", nullable: true),
+                    DemographicRaceTwoOrMoreRaces = table.Column<bool>(type: "TEXT", nullable: true),
+                    HispanicOrLatinoEthnicity = table.Column<bool>(type: "TEXT", nullable: true),
+                    CountryOfBirthCode = table.Column<string>(type: "TEXT", nullable: true),
+                    StateOfBirthAbbreviation = table.Column<string>(type: "TEXT", nullable: true),
+                    CityOfBirth = table.Column<string>(type: "TEXT", nullable: true),
+                    PublicSchoolResidenceStatus = table.Column<string>(type: "TEXT", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Demographic", x => x.Id);
+                });
             migrationBuilder.CreateIndex(
                 name: "IX_AcademicSessions_ParentAcademicSessionId",
                 table: "AcademicSessions",

@@ -11,6 +11,7 @@ namespace OneRosterProviderDemo.Models
     {
         public ApiContext(DbContextOptions<ApiContext> options) : base(options) { }
         public DbSet<AcademicSession> AcademicSessions { get; set; }
+        public DbSet<Demographic> Demographics { get; set; }
         public DbSet<Klass> Klasses { get; set; }
         public DbSet<KlassAcademicSession> KlassAcademicSessions { get; set; }
         public DbSet<Course> Courses { get; set; }
@@ -18,6 +19,7 @@ namespace OneRosterProviderDemo.Models
         public DbSet<LineItem> LineItems { get; set; }
         public DbSet<LineItemCategory> LineItemCategories { get; set; }
         public DbSet<Org> Orgs { get; set; }
+        public DbSet<Resource> Resources { get; set; }
         public DbSet<Result> Results { get; set; }
         public DbSet<User> Users { get; set; }
         public DbSet<UserAgent> UserAgents { get; set; }

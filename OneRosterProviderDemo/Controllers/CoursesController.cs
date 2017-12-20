@@ -58,5 +58,23 @@ namespace OneRosterProviderDemo.Controllers
             course.AsJson(serializer.writer, BaseUrl());
             return JsonOk(serializer.Finish());
         }
+
+        // GET ims/oneroster/v1p1/courses/5
+        [HttpGet("{id}/resources")]
+        public IActionResult GetResourcesForCourse([FromRoute] string id)
+        {
+            var course = db.Courses
+                .Include(c => c.SchoolYearAcademicSession)
+                .Include(c => c.Org)
+                .FirstOrDefault(c => c.Id == id);
+
+            if (course == null)
+            {
+                return NotFound();
+            }
+            serializer = new OneRosterSerializer("course");
+            course.AsJson(serializer.writer, BaseUrl());
+            return JsonOk(serializer.Finish());
+        }
     }
 }
