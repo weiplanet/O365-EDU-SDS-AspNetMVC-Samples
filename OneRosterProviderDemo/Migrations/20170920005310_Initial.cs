@@ -114,7 +114,8 @@ namespace OneRosterProviderDemo.Migrations
                     Status = table.Column<int>(type: "INTEGER", nullable: false),
                     UpdatedAt = table.Column<DateTime>(type: "TEXT", nullable: false),
                     Username = table.Column<string>(type: "TEXT", nullable: false),
-                    _grades = table.Column<string>(type: "TEXT", nullable: true)
+                    _grades = table.Column<string>(type: "TEXT", nullable: true),
+                    _userIds = table.Column<string>(type: "TEXT", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -135,7 +136,8 @@ namespace OneRosterProviderDemo.Migrations
                     Title = table.Column<string>(type: "TEXT", nullable: false),
                     UpdatedAt = table.Column<DateTime>(type: "TEXT", nullable: false),
                     _grades = table.Column<string>(type: "TEXT", nullable: true),
-                    _subjectCodes = table.Column<string>(type: "TEXT", nullable: true)
+                    _subjectCodes = table.Column<string>(type: "TEXT", nullable: true),
+                    _resources = table.Column<string>(type: "TEXT", nullable: true)
                 },
                 constraints: table =>
                 {

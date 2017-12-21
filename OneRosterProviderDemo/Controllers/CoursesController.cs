@@ -66,16 +66,18 @@ namespace OneRosterProviderDemo.Controllers
         {
             var course = db.Courses
                 .FirstOrDefault(c => c.Id == id);
-
+            
             if (course == null || course.Resources == null)
             {
                 return NotFound();
             }
             serializer = new OneRosterSerializer("course");
+            serializer.writer.WriteStartArray();
             foreach (Resource resource in course.Resources)
             {
                 resource.AsJson(serializer.writer, BaseUrl());
             }
+            serializer.writer.WriteEndArray();
             return JsonOk(serializer.Finish());
         }
     }

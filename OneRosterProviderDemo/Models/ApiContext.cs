@@ -38,10 +38,14 @@ namespace OneRosterProviderDemo.Models
             modelBuilder.Entity<Course>()
                 .Property("_grades");
             modelBuilder.Entity<Course>()
+                .Property("_resources");
+            modelBuilder.Entity<Course>()
                 .Property("_subjectCodes");
 
             modelBuilder.Entity<User>()
                 .Property("_grades");
+            modelBuilder.Entity<User>()
+                .Property("_userIds");
 
             modelBuilder.Entity<UserAgent>()
                 .HasOne(ua => ua.Subject)

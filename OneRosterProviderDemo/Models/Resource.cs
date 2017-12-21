@@ -59,6 +59,7 @@ namespace OneRosterProviderDemo.Models
         public new void AsJson(JsonWriter writer, string baseUrl)
         {
             writer.WriteStartObject();
+
             base.AsJson(writer, baseUrl);
 
             if (Title != null)
@@ -93,7 +94,6 @@ namespace OneRosterProviderDemo.Models
             //}
 
             writer.WriteEndObject();
-            writer.Flush();
         }
 
         public static new void CsvHeader(CsvWriter writer)
