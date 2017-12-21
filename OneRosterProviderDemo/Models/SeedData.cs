@@ -121,7 +121,43 @@ namespace OneRosterProviderDemo.Models
                     CourseCode = "CAF304",
                     OrgId = "org-2",
                     Grades = new string[] { "13", "UG" },
-                    SubjectCodes = new string[] { "03098" }
+                    SubjectCodes = new string[] { "03098" },
+                    Resources = new Resource[]
+                    {
+                        new Resource()
+                        {
+                            Id = "resource-1",
+                            UpdatedAt = DateTime.Now,
+                            CreatedAt = DateTime.Now,
+                            Status = Vocabulary.StatusType.active,
+                            Title = "Coffee Chemistry (5th Edition)",
+                            VendorResourceId = "vendor-resource-1",
+                            VendorId = "vendor-1",
+                            ApplicationId = "application-1"
+                        },
+                        new Resource()
+                        {
+                            Id = "resource-2",
+                            UpdatedAt = DateTime.Now,
+                            CreatedAt = DateTime.Now,
+                            Status = Vocabulary.StatusType.active,
+                            Title = "Espresso Dynamics (2nd Edition)",
+                            VendorResourceId = "vendor-resource-2",
+                            VendorId = "vendor-1",
+                            ApplicationId = "application-1"
+                        },
+                        new Resource()
+                        {
+                            Id = "resource-3",
+                            UpdatedAt = DateTime.Now,
+                            CreatedAt = DateTime.Now,
+                            Status = Vocabulary.StatusType.active,
+                            Title = "Fundamentals of Cappucino Analysis (1st Edition)",
+                            VendorResourceId = "vendor-resource-3",
+                            VendorId = "vendor-2",
+                            ApplicationId = "application-1"
+                        }
+                    }
                 }
             );
 
@@ -438,42 +474,6 @@ namespace OneRosterProviderDemo.Models
                     Status = Vocabulary.StatusType.active,
                     UserId = "user-4",
                     OrgId = "org-2"
-                }
-            );
-
-            context.Resources.AddRange(
-                new Resource()
-                {
-                    Id = "resource-1",
-                    UpdatedAt = DateTime.Now,
-                    CreatedAt = DateTime.Now,
-                    Status = Vocabulary.StatusType.active,
-                    Title = "Coffee Chemistry (5th Edition)",
-                    VendorResourceId = "vendor-resource-1",
-                    VendorId = "vendor-1",
-                    ApplicationId = "application-1"
-                },
-                new Resource()
-                {
-                    Id = "resource-2",
-                    UpdatedAt = DateTime.Now,
-                    CreatedAt = DateTime.Now,
-                    Status = Vocabulary.StatusType.active,
-                    Title = "Espresso Dynamics (2nd Edition)",
-                    VendorResourceId = "vendor-resource-2",
-                    VendorId = "vendor-1",
-                    ApplicationId = "application-1"
-                },
-                new Resource()
-                {
-                    Id = "resource-3",
-                    UpdatedAt = DateTime.Now,
-                    CreatedAt = DateTime.Now,
-                    Status = Vocabulary.StatusType.active,
-                    Title = "Fundamentals of Cappucino Analysis (1st Edition)",
-                    VendorResourceId = "vendor-resource-3",
-                    VendorId = "vendor-2",
-                    ApplicationId = "application-1"
                 }
             );
 

@@ -3,7 +3,8 @@
 * See LICENSE in the project root for license information.
 */
 
-using System.Collections.Generic;
+using Newtonsoft.Json;
+using System;
 using Microsoft.AspNetCore.Mvc;
 using OneRosterProviderDemo.Models;
 using System.Linq;
@@ -64,16 +65,17 @@ namespace OneRosterProviderDemo.Controllers
         public IActionResult GetResourcesForCourse([FromRoute] string id)
         {
             var course = db.Courses
-                .Include(c => c.SchoolYearAcademicSession)
-                .Include(c => c.Org)
                 .FirstOrDefault(c => c.Id == id);
 
-            if (course == null)
+            if (course == null || course.Resources == null)
             {
                 return NotFound();
             }
             serializer = new OneRosterSerializer("course");
-            course.AsJson(serializer.writer, BaseUrl());
+            foreach (Resource resource in course.Resources)
+            {
+                resource.AsJson(serializer.writer, BaseUrl());
+            }
             return JsonOk(serializer.Finish());
         }
     }

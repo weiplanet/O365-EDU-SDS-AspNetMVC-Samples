@@ -39,6 +39,14 @@ namespace OneRosterProviderDemo.Models
         public Org Org { get; set; }
 
         [NotMapped]
+        public Resource[] Resources
+        {
+            get { return _resources == null ? null : JsonConvert.DeserializeObject<Resource[]>(_resources); }
+            set { _resources = JsonConvert.SerializeObject(value); }
+        }
+        private string _resources { get; set; }
+
+        [NotMapped]
         [Grades]
         public string[] Grades
         {
@@ -105,6 +113,17 @@ namespace OneRosterProviderDemo.Models
                 foreach (var subjectCode in SubjectCodes)
                 {
                     writer.WriteValue(subjectCode);
+                }
+                writer.WriteEndArray();
+            }
+
+            if (Resources != null && Resources.Length > 0)
+            {
+                writer.WritePropertyName("resources");
+                writer.WriteStartArray();
+                foreach (var resource in Resources)
+                {
+                    resource.AsJson(writer, baseUrl);
                 }
                 writer.WriteEndArray();
             }
