@@ -122,45 +122,23 @@ namespace OneRosterProviderDemo.Models
                     OrgId = "org-2",
                     Grades = new string[] { "13", "UG" },
                     SubjectCodes = new string[] { "03098" },
-                    Resources = new Resource[]
-                    {
-                        new Resource()
-                        {
-                            Id = "resource-1",
-                            UpdatedAt = DateTime.Now,
-                            CreatedAt = DateTime.Now,
-                            Status = Vocabulary.StatusType.active,
-                            Title = "Coffee Chemistry (5th Edition)",
-                            VendorResourceId = "vendor-resource-1",
-                            VendorId = "vendor-1",
-                            ApplicationId = "application-1"
-                        },
-                        new Resource()
-                        {
-                            Id = "resource-2",
-                            UpdatedAt = DateTime.Now,
-                            CreatedAt = DateTime.Now,
-                            Status = Vocabulary.StatusType.active,
-                            Title = "Espresso Dynamics (2nd Edition)",
-                            VendorResourceId = "vendor-resource-2",
-                            VendorId = "vendor-1",
-                            ApplicationId = "application-1"
-                        },
-                        new Resource()
-                        {
-                            Id = "resource-3",
-                            UpdatedAt = DateTime.Now,
-                            CreatedAt = DateTime.Now,
-                            Status = Vocabulary.StatusType.active,
-                            Title = "Fundamentals of Cappucino Analysis (1st Edition)",
-                            VendorResourceId = "vendor-resource-3",
-                            VendorId = "vendor-2",
-                            ApplicationId = "application-1"
-                        }
-                    }
+                    Resources = new string[] { "resource-1", "resource-2" }
+                },
+                new Course()
+                {
+                    Id = "course-2",
+                    UpdatedAt = DateTime.Now,
+                    CreatedAt = DateTime.Now,
+                    Status = Vocabulary.StatusType.active,
+                    Title = "Superheroes: Theory and Practice",
+                    SchoolYearAcademicSessionId = "academic-session-1",
+                    CourseCode = "SUP201",
+                    OrgId = "org-2",
+                    Grades = new string[] { "13", "UG" },
+                    SubjectCodes = new string[] { "15058", "15098" },
+                    Resources = new string[] { "resource-3" }
                 }
             );
-
 
             context.Klasses.AddRange(
                 new Klass()
@@ -518,6 +496,50 @@ namespace OneRosterProviderDemo.Models
                     CountryOfBirthCode = "FR",
                     CityOfBirth = "Paris",
                     PublicSchoolResidenceStatus = "1653"
+                }
+            );
+
+            context.Resources.AddRange(
+                new Resource()
+                {
+                    Id = "resource-1",
+                    UpdatedAt = DateTime.Now,
+                    CreatedAt = DateTime.Now,
+                    Status = Vocabulary.StatusType.active,
+                    Title = "Fundamentals of Cappucino Analysis (1st Edition)",
+                    VendorResourceId = "vendor-resource-1",
+                    VendorId = "vendor-1",
+                    ApplicationId = "application-1",
+                    Importance = Vocabulary.Importance.primary,
+                    Roles = new Vocabulary.RoleType[] { Vocabulary.RoleType.teacher },
+                    CourseId = "course-1"
+                },
+                new Resource()
+                {
+                    Id = "resource-2",
+                    UpdatedAt = DateTime.Now,
+                    CreatedAt = DateTime.Now,
+                    Status = Vocabulary.StatusType.active,
+                    Title = "Espresso Dynamics (2nd Edition)",
+                    VendorResourceId = "vendor-resource-2",
+                    VendorId = "vendor-1",
+                    ApplicationId = "application-1",
+                    Importance = Vocabulary.Importance.secondary,
+                    Roles = new Vocabulary.RoleType[] { Vocabulary.RoleType.aide, Vocabulary.RoleType.administrator },
+                    CourseId = "course-1"
+                },
+                new Resource()
+                {
+                    Id = "resource-3",
+                    UpdatedAt = DateTime.Now,
+                    CreatedAt = DateTime.Now,
+                    Status = Vocabulary.StatusType.active,
+                    Title = "Journal of Superhero Science",
+                    VendorResourceId = "vendor-resource-3",
+                    VendorId = "vendor-2",
+                    ApplicationId = "application-1",
+                    Importance = Vocabulary.Importance.primary,
+                    CourseId = "course-2"
                 }
             );
 

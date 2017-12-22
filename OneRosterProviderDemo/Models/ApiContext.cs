@@ -56,6 +56,9 @@ namespace OneRosterProviderDemo.Models
                 .HasOne(uo => uo.User)
                 .WithMany(u => u.UserOrgs)
                 .HasForeignKey(uo => uo.UserId);
+
+            modelBuilder.Entity<Resource>()
+                .Property("_roles");
         }
     }
 }

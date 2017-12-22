@@ -60,21 +60,25 @@ namespace OneRosterProviderDemo.Controllers
             return JsonOk(serializer.Finish());
         }
 
-        // GET ims/oneroster/v1p1/courses/5
-        [HttpGet("{id}/resources")]
-        public IActionResult GetResourcesForCourse([FromRoute] string id)
+        // GET ims/oneroster/v1p1/courses/5/resources
+        [HttpGet("{courseId}/resources")]
+        public IActionResult GetResourcesForCourse([FromRoute] string courseId)
         {
             var course = db.Courses
-                .FirstOrDefault(c => c.Id == id);
-            
+                .FirstOrDefault(c => c.Id == courseId);
+
             if (course == null || course.Resources == null)
             {
                 return NotFound();
             }
-            serializer = new OneRosterSerializer("course");
+
+            serializer = new OneRosterSerializer("resources");
             serializer.writer.WriteStartArray();
-            foreach (Resource resource in course.Resources)
+            foreach (string resourceId in course.Resources)
             {
+                var resource = db.Resources
+                    .FirstOrDefault(r => r.Id == resourceId);
+
                 resource.AsJson(serializer.writer, BaseUrl());
             }
             serializer.writer.WriteEndArray();

@@ -403,9 +403,12 @@ namespace OneRosterProviderDemo.Migrations
                     Status = table.Column<int>(type: "INTEGER", nullable: false),
                     UpdatedAt = table.Column<DateTime>(type: "TEXT", nullable: false),
                     Title = table.Column<string>(type: "TEXT", nullable: true),
+                    Importance = table.Column<int>(type: "TEXT", nullable: true),
                     VendorResourceId = table.Column<string>(type: "TEXT", nullable: false),
                     VendorId = table.Column<string>(type: "TEXT", nullable: true),
-                    ApplicationId = table.Column<string>(type: "TEXT", nullable: true)
+                    ApplicationId = table.Column<string>(type: "TEXT", nullable: true),
+                    CourseId = table.Column<string>(type: "TEXT", nullable: false),
+                    _roles = table.Column<string>(type: "TEXT", nullable: true)
                 },
                 constraints: table => 
                 {

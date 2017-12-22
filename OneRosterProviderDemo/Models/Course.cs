@@ -39,9 +39,9 @@ namespace OneRosterProviderDemo.Models
         public Org Org { get; set; }
 
         [NotMapped]
-        public Resource[] Resources
+        public string[] Resources
         {
-            get { return _resources == null ? null : JsonConvert.DeserializeObject<Resource[]>(_resources); }
+            get { return _resources == null ? null : JsonConvert.DeserializeObject<string[]>(_resources); }
             set { _resources = JsonConvert.SerializeObject(value); }
         }
         private string _resources { get; set; }
@@ -123,7 +123,14 @@ namespace OneRosterProviderDemo.Models
                 writer.WriteStartArray();
                 foreach (var resource in Resources)
                 {
-                    resource.AsJson(writer, baseUrl);
+                    writer.WriteStartObject();
+                    writer.WritePropertyName("href");
+                    writer.WriteValue(baseUrl + "/resources/" + resource);
+                    writer.WritePropertyName("sourceId");
+                    writer.WriteValue(resource);
+                    writer.WritePropertyName("type");
+                    writer.WriteValue("resource");
+                    writer.WriteEndObject();
                 }
                 writer.WriteEndArray();
             }

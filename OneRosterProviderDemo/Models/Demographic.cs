@@ -5,14 +5,8 @@
 
 using CsvHelper;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Converters;
 using OneRosterProviderDemo.Vocabulary;
 using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.IO;
-using System.Text;
 
 namespace OneRosterProviderDemo.Models
 {

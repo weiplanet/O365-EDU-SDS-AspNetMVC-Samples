@@ -11,26 +11,6 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.IO;
-using System.Text;
-
-//title 0..1
-//For example: Organic Chemistry
-
-//roles 0..*
-//The set of roles.See subsection 4.13.5 for the enumeration list.
-
-//importance 0..1
-//See subsection 4.13.3 for the enumeration list.
-
-//vendorResourceId 1
-//Unique identifier for the resource allocated by the vendor.
-
-//vendorId 0..1
-//Identifier for the vendor who created the resource. This will be assigned by IMS as part of Conformance Certification.
-
-//applicationId 0..1
-//Identifier for the application associated with the resource.
 
 namespace OneRosterProviderDemo.Models
 {
@@ -47,14 +27,23 @@ namespace OneRosterProviderDemo.Models
         }
         
         public string Title { get; set; }
-        //public ? Roles { get; set; }
-        //public ? Importance { get; set; }
+
+        [NotMapped]
+        public RoleType[] Roles
+        {
+            get { return _roles == null ? null : JsonConvert.DeserializeObject<RoleType[]>(_roles); }
+            set { _roles = JsonConvert.SerializeObject(value); }
+        }
+        private string _roles { get; set; }
+
+        public Importance Importance { get; set; }
 
         [Required]
         public string VendorResourceId { get; set; }
 
         public string VendorId { get; set; }
         public string ApplicationId { get; set; }
+        public string CourseId { get; set; }
 
         public new void AsJson(JsonWriter writer, string baseUrl)
         {
@@ -67,8 +56,20 @@ namespace OneRosterProviderDemo.Models
                 writer.WritePropertyName("title");
                 writer.WriteValue(Title);
             }
-            // Roles
-            // Importance
+
+            if (Roles != null)
+            {
+                writer.WritePropertyName("roles");
+                writer.WriteStartArray();
+                foreach (var role in Roles)
+                {
+                    writer.WriteValue(Enum.GetName(typeof(RoleType), role));
+                }
+                writer.WriteEndArray();
+            }
+
+            writer.WritePropertyName("importance");
+            writer.WriteValue(Enum.GetName(typeof(Importance), Importance));
 
             writer.WritePropertyName("vendorResourceId");
             writer.WriteValue(VendorResourceId);
@@ -84,14 +85,6 @@ namespace OneRosterProviderDemo.Models
                 writer.WritePropertyName("applicationId");
                 writer.WriteValue(ApplicationId);
             }
-
-            //if (Children != null && Children.Count > 0)
-            //{
-            //    writer.WritePropertyName("children");
-            //    writer.WriteStartArray();
-            //    Children.ForEach(child => child.AsJsonReference(writer, baseUrl));
-            //    writer.WriteEndArray();
-            //}
 
             writer.WriteEndObject();
         }
