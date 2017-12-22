@@ -32,10 +32,21 @@ namespace OneRosterProviderDemo.Controllers
         }
 
         // GET ims/oneroster/v1p1/demographics/5
-        [HttpGet("{id}")]
-        public IActionResult GetDemographic([FromRoute] string id)
+        [HttpGet("{user_id}")]
+        public IActionResult GetDemographic([FromRoute] string user_id)
         {
-            return NotFound();
+            var user = db.Demographics
+                .SingleOrDefault(u => u.Id == user_id);
+
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            serializer = new Serializers.OneRosterSerializer("demographic");
+            user.AsJson(serializer.writer, BaseUrl());
+
+            return JsonOk(serializer.Finish());
         }
     }
 }

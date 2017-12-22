@@ -52,11 +52,9 @@ namespace OneRosterProviderDemo.Models
                 writer.WritePropertyName("birthDate");
                 writer.WriteValue(BirthDate);
             }
-            if (Sex != null)
-            {
-                writer.WritePropertyName("gender");
-                writer.WriteValue(Sex);
-            }
+            writer.WritePropertyName("sex");
+            writer.WriteValue(Sex);
+
             writer.WritePropertyName("americanIndianOrAlaskaNative");
             writer.WriteValue(AmericanIndianOrAlaskaNative);
             

@@ -480,36 +480,43 @@ namespace OneRosterProviderDemo.Models
             context.Demographics.AddRange(
                 new Demographic()
                 {
-                    Id = "demographic-1",
+                    Id = "user-1",
                     UpdatedAt = DateTime.Now,
                     CreatedAt = DateTime.Now,
                     Status = Vocabulary.StatusType.active,
                     Sex = Vocabulary.Gender.male,
                     BirthDate = DateTime.MinValue,
                     AmericanIndianOrAlaskaNative = true,
-                    Asian = false, 
-                    BlackOrAfricanAmerican = false,
-                    NativeHawaiianOrOtherPacificIslander = false,
-                    White = false,
-                    DemographicRaceTwoOrMoreRaces = false,
-                    HispanicOrLatinoEthnicity = false,
-                    CountryOfBirthCode = "USA",
+                    CountryOfBirthCode = "US",
                     StateOfBirthAbbreviation = "AK",
                     CityOfBirth = "Juneau", 
                     PublicSchoolResidenceStatus = "1652"
                 },
                 new Demographic()
                 {
-                    Id = "demographic-2",
+                    Id = "user-2",
                     UpdatedAt = DateTime.Now,
                     CreatedAt = DateTime.Now,
                     Status = Vocabulary.StatusType.active,
                     Sex = Vocabulary.Gender.female,
                     BirthDate = DateTime.MinValue,
                     White = true,
-                    CountryOfBirthCode = "USA",
+                    CountryOfBirthCode = "US",
                     StateOfBirthAbbreviation = "CA",
                     CityOfBirth = "San Francisco", 
+                    PublicSchoolResidenceStatus = "1653"
+                },
+                new Demographic()
+                {
+                    Id = "user-3",
+                    UpdatedAt = DateTime.Now,
+                    CreatedAt = DateTime.Now,
+                    Status = Vocabulary.StatusType.active,
+                    Sex = Vocabulary.Gender.female,
+                    BirthDate = DateTime.MinValue,
+                    White = true,
+                    CountryOfBirthCode = "FR",
+                    CityOfBirth = "Paris",
                     PublicSchoolResidenceStatus = "1653"
                 }
             );
