@@ -155,7 +155,8 @@ namespace OneRosterProviderDemo.Models
                     SchoolOrgId = "org-2",
                     Grades = new string[] { "13", "UG" },
                     SubjectCodes = new string[] { "03098" },
-                    Periods = new string[] { "1" }
+                    Periods = new string[] { "1" },
+                    Resources = new string[] { "resource-4" }
                 },
                 new Klass()
                 {
@@ -511,8 +512,7 @@ namespace OneRosterProviderDemo.Models
                     VendorId = "vendor-1",
                     ApplicationId = "application-1",
                     Importance = Vocabulary.Importance.primary,
-                    Roles = new Vocabulary.RoleType[] { Vocabulary.RoleType.teacher },
-                    CourseId = "course-1"
+                    Roles = new Vocabulary.RoleType[] { Vocabulary.RoleType.teacher }
                 },
                 new Resource()
                 {
@@ -525,8 +525,7 @@ namespace OneRosterProviderDemo.Models
                     VendorId = "vendor-1",
                     ApplicationId = "application-1",
                     Importance = Vocabulary.Importance.secondary,
-                    Roles = new Vocabulary.RoleType[] { Vocabulary.RoleType.aide, Vocabulary.RoleType.administrator },
-                    CourseId = "course-1"
+                    Roles = new Vocabulary.RoleType[] { Vocabulary.RoleType.aide, Vocabulary.RoleType.administrator }
                 },
                 new Resource()
                 {
@@ -538,8 +537,19 @@ namespace OneRosterProviderDemo.Models
                     VendorResourceId = "vendor-resource-3",
                     VendorId = "vendor-2",
                     ApplicationId = "application-1",
-                    Importance = Vocabulary.Importance.primary,
-                    CourseId = "course-2"
+                    Importance = Vocabulary.Importance.primary
+                },
+                new Resource()
+                {
+                    Id = "resource-4",
+                    UpdatedAt = DateTime.Now,
+                    CreatedAt = DateTime.Now,
+                    Status = Vocabulary.StatusType.active,
+                    Title = "Journal of Overcaffeinated Scientists",
+                    VendorResourceId = "vendor-resource-4",
+                    VendorId = "vendor-3",
+                    ApplicationId = "application-1",
+                    Importance = Vocabulary.Importance.secondary
                 }
             );
 

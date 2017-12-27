@@ -231,7 +231,8 @@ namespace OneRosterProviderDemo.Migrations
                     UpdatedAt = table.Column<DateTime>(type: "TEXT", nullable: false),
                     _grades = table.Column<string>(type: "TEXT", nullable: true),
                     _periods = table.Column<string>(type: "TEXT", nullable: true),
-                    _subjectCodes = table.Column<string>(type: "TEXT", nullable: true)
+                    _subjectCodes = table.Column<string>(type: "TEXT", nullable: true),
+                    _resources = table.Column<string>(type: "TEXT", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -407,7 +408,6 @@ namespace OneRosterProviderDemo.Migrations
                     VendorResourceId = table.Column<string>(type: "TEXT", nullable: false),
                     VendorId = table.Column<string>(type: "TEXT", nullable: true),
                     ApplicationId = table.Column<string>(type: "TEXT", nullable: true),
-                    CourseId = table.Column<string>(type: "TEXT", nullable: false),
                     _roles = table.Column<string>(type: "TEXT", nullable: true)
                 },
                 constraints: table => 

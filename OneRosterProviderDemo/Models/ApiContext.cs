@@ -34,6 +34,8 @@ namespace OneRosterProviderDemo.Models
                 .Property("_subjectCodes");
             modelBuilder.Entity<Klass>()
                 .Property("_periods");
+            modelBuilder.Entity<Klass>()
+                .Property("_resources");
 
             modelBuilder.Entity<Course>()
                 .Property("_grades");

@@ -43,7 +43,7 @@ namespace OneRosterProviderDemo.Models
 
         public string VendorId { get; set; }
         public string ApplicationId { get; set; }
-        public string CourseId { get; set; }
+        //public string CourseId { get; set; }
 
         public new void AsJson(JsonWriter writer, string baseUrl)
         {
@@ -77,7 +77,7 @@ namespace OneRosterProviderDemo.Models
             if (VendorId != null)
             {
                 writer.WritePropertyName("vendorId");
-                writer.WriteValue(Title);
+                writer.WriteValue(VendorId);
             }
 
             if (ApplicationId != null)
