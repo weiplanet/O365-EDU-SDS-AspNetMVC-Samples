@@ -62,5 +62,42 @@ namespace OneRosterProviderDemo.Controllers
 
             return JsonOk(serializer.Finish());
         }
+
+        // GET ims/oneroster/v1p1/users/5/classes
+        [HttpGet("{id}/classes")]
+        public IActionResult GetClassesForUser([FromRoute] string id)
+        {
+            var user = db.Users
+                .Include(u => u.UserOrgs)
+                    .ThenInclude(uo => uo.Org)
+                .Include(u => u.UserAgents)
+                    .ThenInclude(ua => ua.Agent)
+                .SingleOrDefault(u => u.Id == id);
+
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            // get all Enrollments for the given userId
+            var enrollments = db.Enrollments
+                .Include(e => e.Klass)
+                    .ThenInclude(k => k.KlassAcademicSessions)
+                        .ThenInclude(kas => kas.AcademicSession)
+                .Include(e => e.Klass)
+                    .ThenInclude(k => k.Course)
+                .Include(e => e.Klass)
+                    .ThenInclude(k => k.School)
+                .Where(e => e.UserId == id);
+            serializer = new Serializers.OneRosterSerializer("classes");
+            serializer.writer.WriteStartArray();
+            foreach (var enrollment in enrollments)
+            {
+                enrollment.Klass.AsJson(serializer.writer, BaseUrl());
+            }
+            serializer.writer.WriteEndArray();
+
+            return JsonOk(serializer.Finish());
+        }
     }
 }
