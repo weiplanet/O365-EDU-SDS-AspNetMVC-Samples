@@ -104,9 +104,9 @@ Debug **OneRosterProviderDemo**:
    - **AzureAd:ClientSecret**: use the Key value of the app registration you created earlier.
    - **AzureDomain**: use your AD tenant domain, which should agree with the **AzureAd:Authority** entry
 
-2. In the Package Manager Console, run the command `EntityFrameworkCore\Update-Database` to generate the initial database.
+2. In the Package Manager Console, run the command `EntityFrameworkCore\Update-Database` to generate the initial database. If this causes an error, try running the command `Import-Package Microsoft.EntityFrameworkCore`.
 3. Set **OneRosterProviderDemo** as StartUp project, and press F5.
-4. Visit `/seeds` to populate your database with sample entities.
+4. Visit `/seeds` to populate your database with sample entities. Make sure to access the endpoint using HTTPS.
 
 ## Deploy the sample to Azure
 
@@ -115,7 +115,7 @@ Debug **OneRosterProviderDemo**:
   - Select **Build > Publish OneRosterProviderDemo**
   - Click **Create new profile**
   - Select **Microsoft Azure App Service** and **Create New**
-  - Click **Ok**
+  - Click **Publish**
   - Sign into your Azure account
   - Select a Resource Group for the deploy, or create a new one by clicking **New**
   - Select an App Service Plan for the deploy, or create a new one by clicking **New**
@@ -169,7 +169,8 @@ This web application is based on an ASP.NET Core Web project template.
 ### Authorization
 
 #### OneRoster Endpoints
-The `Middlewares/OAuth1.cs` file defines a middleware that validates the OAuth1 signature for each incoming request with a OneRoster route.  This file also contains the hard-coded client ID and secret.
+The `Middlewares/OAuth.cs` file defines a middleware that validates the OAuth1 or OAuth2 signature for each incoming request with a OneRoster route.  This file also contains the hard-coded client ID and secret.
+In order to make OAuth2 requests, first visit the /token endpoint using OAuth1 credentials to get the access token.
 The `Startup.cs` file configures the app to use this middleware.
 While the OneRoster v1.1 spec allows for OAuth2 bearer token authorization, it is not supported in this sample.
 
