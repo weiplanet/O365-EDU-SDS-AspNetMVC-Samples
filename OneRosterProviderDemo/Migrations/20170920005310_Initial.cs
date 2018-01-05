@@ -69,6 +69,18 @@ namespace OneRosterProviderDemo.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "OauthTokens",
+                columns: table => new
+                {
+                    Value = table.Column<string>(type: "TEXT", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "TEXT", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_OauthTokens", x => x.Value);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Orgs",
                 columns: table => new
                 {
@@ -555,6 +567,9 @@ namespace OneRosterProviderDemo.Migrations
                 name: "OauthNonces");
 
             migrationBuilder.DropTable(
+                name: "OauthTokens");
+
+            migrationBuilder.DropTable(
                 name: "Results");
 
             migrationBuilder.DropTable(
@@ -583,6 +598,12 @@ namespace OneRosterProviderDemo.Migrations
 
             migrationBuilder.DropTable(
                 name: "AcademicSessions");
+
+            migrationBuilder.DropTable(
+                name: "Demographics");
+
+            migrationBuilder.DropTable(
+                name: "Resources");
         }
     }
 }

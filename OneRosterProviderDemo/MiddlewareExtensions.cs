@@ -12,7 +12,7 @@ namespace OneRosterProviderDemo
     {
         public static IApplicationBuilder UseOauthMessageSigning(this IApplicationBuilder builder)
         {
-            return builder.UseMiddleware<OAuth1>();
+            return builder.UseMiddleware<OAuth2>();
         }
     }
 }

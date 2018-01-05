@@ -23,7 +23,14 @@ namespace OneRosterProviderDemo.Controllers
         [HttpGet]
         public IActionResult Reset()
         {
-            SeedData.Initialize(db);
+            try
+            {
+                SeedData.Initialize(db);
+            }
+            catch (Exception e)
+            {
+                return Ok(e.ToString());
+            }
             return Ok("Seeded");
         }
     }

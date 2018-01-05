@@ -18,13 +18,14 @@ namespace OneRosterProviderDemo.Models
         public DbSet<Enrollment> Enrollments { get; set; }
         public DbSet<LineItem> LineItems { get; set; }
         public DbSet<LineItemCategory> LineItemCategories { get; set; }
+        public DbSet<OauthNonce> OauthNonces { get; set; }
+        public DbSet<OauthToken> OauthTokens { get; set; }
         public DbSet<Org> Orgs { get; set; }
         public DbSet<Resource> Resources { get; set; }
         public DbSet<Result> Results { get; set; }
         public DbSet<User> Users { get; set; }
         public DbSet<UserAgent> UserAgents { get; set; }
         public DbSet<UserOrg> UserOrgs { get; set; }
-        public DbSet<OauthNonce> OauthNonces { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
