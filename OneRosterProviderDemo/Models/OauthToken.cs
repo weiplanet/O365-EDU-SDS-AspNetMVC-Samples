@@ -19,10 +19,8 @@ namespace OneRosterProviderDemo.Models
         public bool CanBeUsed()
         {
             long elapsedTicks = DateTime.Now.Ticks - CreatedAt.Ticks;
-
             var elapsedSpan = new TimeSpan(elapsedTicks);
-
-            return elapsedSpan.Minutes < 1440;
+            return elapsedSpan.TotalMinutes < 1440;
         }
     }
 }

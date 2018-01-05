@@ -15,12 +15,12 @@ namespace OneRosterProviderDemo.Controllers
         [HttpGet]
         public IActionResult GetToken()
         {
-            var verification = OAuth1.Verify(HttpContext, db);
+            var verification = OAuth.Verify(HttpContext, db);
             if (verification != 0)
             {
                 return StatusCode(verification);
             }
-            string token = OAuth2.GenerateBearerToken();
+            string token = OAuth.GenerateBearerToken();
             var tokenEntry = new OauthToken()
             {
                 Value = token,
