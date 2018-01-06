@@ -51,12 +51,22 @@ namespace OneRosterProviderDemo.Middlewares
 
         #region Parameter Parsing
 
+        private static Regex headerMatcher = new Regex("\\w*?\\s*?([\\w]*)=\"([\\w%\\.\\-]*)\"");
         private static KeyValuePair<string, string> ParseHeaderFragment(string pair)
         {
-            var pairArray = pair.Split(" ");
+            if(pair.Contains("Bearer"))
+            {
+                var pairArray = pair.Split(" ");
+                return new KeyValuePair<string, string>(
+                    Uri.EscapeDataString(pairArray[0]),
+                    Uri.EscapeDataString(pairArray[1])
+                );
+            }
+            var match = headerMatcher.Match(pair);
+
             return new KeyValuePair<string, string>(
-                Uri.EscapeDataString(pairArray[0]),
-                Uri.EscapeDataString(pairArray[1])
+                Uri.EscapeDataString(match.Groups[1].Value),
+                Uri.EscapeDataString(match.Groups[2].Value)
             );
         }
 
@@ -293,7 +303,8 @@ namespace OneRosterProviderDemo.Middlewares
             {
                 using (var sha1 = new HMACSHA1(keyBytes))
                 {
-                    return Uri.EscapeDataString(Convert.ToBase64String(sha1.ComputeHash(msgBytes)));
+                    var unescaped = Convert.ToBase64String(sha1.ComputeHash(msgBytes));
+                    return Uri.EscapeDataString(unescaped);
                 }
             }
             else
