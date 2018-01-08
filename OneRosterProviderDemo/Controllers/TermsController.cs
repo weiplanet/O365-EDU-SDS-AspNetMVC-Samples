@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using OneRosterProviderDemo.Models;
 using System.Linq;
 using OneRosterProviderDemo.Serializers;
+using Microsoft.EntityFrameworkCore;
 
 namespace OneRosterProviderDemo.Controllers
 {
@@ -52,6 +53,59 @@ namespace OneRosterProviderDemo.Controllers
 
             serializer = new OneRosterSerializer("term");
             term.AsJson(serializer.writer, BaseUrl());
+            return JsonOk(serializer.Finish());
+        }
+
+        // GET ims/oneroster/v1p1/terms/{id}/classes
+        [HttpGet("{id}/classes")]
+        public IActionResult GetClassesForTerm([FromRoute] string id)
+        {
+            var klassAcademicSessions = db.KlassAcademicSessions
+                .Include(kas => kas.Klass)
+                    .ThenInclude(k => k.Course)
+                .Include(kas => kas.Klass)
+                    .ThenInclude(k => k.School)
+                .Include(kas => kas.AcademicSession)
+                .Where(kas => kas.AcademicSessionId == id);
+
+            if(!klassAcademicSessions.Any())
+            {
+                return NotFound();
+            }
+
+            serializer = new OneRosterSerializer("terms");
+            serializer.writer.WriteStartArray();
+            foreach (var kas in klassAcademicSessions)
+            {
+                kas.Klass.AsJson(serializer.writer, BaseUrl());
+            }
+            serializer.writer.WriteEndArray();
+            return JsonOk(serializer.Finish());
+        }
+
+        // GET ims/oneroster/v1p1/terms/{id}/gradingPeriods
+        [HttpGet("{id}/gradingPeriods")]
+        public IActionResult GetGradingPeriodsForTerm([FromRoute] string id)
+        {
+            var term = db.AcademicSessions
+                .Include(s => s.Children)
+                .SingleOrDefault(a => a.Id == id && a.Type == Vocabulary.SessionType.term);
+
+            if(term == null)
+            {
+                return NotFound();
+            }
+
+            serializer = new OneRosterSerializer("gradingPeriods");
+            serializer.writer.WriteStartArray();
+            foreach (var child in term.Children)
+            {
+                if(child.Type == Vocabulary.SessionType.gradingPeriod)
+                {
+                    child.AsJson(serializer.writer, BaseUrl());
+                }
+            }
+            serializer.writer.WriteEndArray();
             return JsonOk(serializer.Finish());
         }
     }
