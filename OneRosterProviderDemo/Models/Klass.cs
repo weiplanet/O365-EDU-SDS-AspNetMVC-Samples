@@ -87,6 +87,14 @@ namespace OneRosterProviderDemo.Models
         }
         private string _periods { get; set; }
 
+        [NotMapped]
+        public string[] Resources
+        {
+            get { return _resources == null ? null : JsonConvert.DeserializeObject<string[]>(_resources); }
+            set { _resources = JsonConvert.SerializeObject(value); }
+        }
+        private string _resources { get; set; }
+
         public new void AsJson(JsonWriter writer, string baseUrl)
         {
             writer.WriteStartObject();
@@ -134,6 +142,24 @@ namespace OneRosterProviderDemo.Models
 
             writer.WritePropertyName("course");
             Course.AsJsonReference(writer, baseUrl);
+
+            writer.WritePropertyName("resources");
+            writer.WriteStartArray();
+            if (Course.Resources != null)
+            {
+                foreach(var resource in Course.Resources)
+                {
+                    writer.WriteValue(resource);
+                }
+            }
+            if (Resources != null)
+            {
+                foreach(var resource in Resources)
+                {
+                    writer.WriteValue(resource);
+                }
+            }
+            writer.WriteEndArray();
 
             writer.WritePropertyName("school");
             School.AsJsonReference(writer, baseUrl);

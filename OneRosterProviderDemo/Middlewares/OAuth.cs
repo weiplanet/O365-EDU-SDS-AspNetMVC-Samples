@@ -16,14 +16,14 @@ using System.Diagnostics;
 
 namespace OneRosterProviderDemo.Middlewares
 {
-    public class OAuth1
+    public class OAuth
     {
         private const string OAUTH_CONSUMER_KEY = "contoso";
         private const string OAUTH_CONSUMER_SECRET = "contoso-secret";
 
         private readonly RequestDelegate _next;
 
-        public OAuth1(RequestDelegate next)
+        public OAuth(RequestDelegate next)
         {
             _next = next;
         }
@@ -52,16 +52,25 @@ namespace OneRosterProviderDemo.Middlewares
         #region Parameter Parsing
 
         private static Regex headerMatcher = new Regex("\\w*?\\s*?([\\w]*)=\"([\\w%\\.\\-]*)\"");
-        private KeyValuePair<string, string> ParseHeaderFragment(string pair)
+        private static KeyValuePair<string, string> ParseHeaderFragment(string pair)
         {
+            if(pair.Contains("Bearer"))
+            {
+                var pairArray = pair.Split(" ");
+                return new KeyValuePair<string, string>(
+                    Uri.EscapeDataString(pairArray[0]),
+                    Uri.EscapeDataString(pairArray[1])
+                );
+            }
             var match = headerMatcher.Match(pair);
+
             return new KeyValuePair<string, string>(
                 Uri.EscapeDataString(match.Groups[1].Value),
                 Uri.EscapeDataString(match.Groups[2].Value)
             );
         }
 
-        private List<KeyValuePair<string, string>> getHeaderParams(HttpRequest request)
+        private static List<KeyValuePair<string, string>> getHeaderParams(HttpRequest request)
         {
             var authHeaders = request.Headers.GetCommaSeparatedValues("Authorization");
 
@@ -79,7 +88,7 @@ namespace OneRosterProviderDemo.Middlewares
             return pairs;
         }
 
-        private List<KeyValuePair<string, string>> getQueryParams(HttpRequest request)
+        private static List<KeyValuePair<string, string>> getQueryParams(HttpRequest request)
         {
             var pairs = new List<KeyValuePair<string, string>>();
 
@@ -109,7 +118,7 @@ namespace OneRosterProviderDemo.Middlewares
         /// <param name="context"></param>
         /// <param name="db"></param>
         /// <returns></returns>
-        private int Verify(HttpContext context, ApiContext db)
+        public static int Verify(HttpContext context, ApiContext db)
         {
             var request = context.Request;
             // Setup the variables necessary to recreate the OAuth 1.0 signature 
@@ -126,8 +135,15 @@ namespace OneRosterProviderDemo.Middlewares
             // Generate and accept or reject the signature
             try
             {
-                var nonce = combinedParams.First(kvp => kvp.Key == "oauth_nonce").Value;
+                // if bearer token is used, then other fields are unnecessary
+                var token = combinedParams.FirstOrDefault(kvp => kvp.Key == "Bearer").Value;
 
+                if (VerifyBearerToken(token, db))
+                {
+                    return 0;
+                }
+
+                var nonce = combinedParams.First(kvp => kvp.Key == "oauth_nonce").Value;
                 var timestamp = combinedParams.First(kvp => kvp.Key == "oauth_timestamp").Value;
                 var clientSignature = combinedParams.First(kvp => kvp.Key == "oauth_signature").Value;
                 var signatureMethod = combinedParams.First(kvp => kvp.Key == "oauth_signature_method").Value.ToUpper();
@@ -176,7 +192,18 @@ namespace OneRosterProviderDemo.Middlewares
             }
         }
 
-        private bool IsValidTimestamp(string timestamp)
+        public static string GenerateBearerToken()
+        {
+            return Convert.ToBase64String(Guid.NewGuid().ToByteArray());
+        }
+
+        private static bool VerifyBearerToken(string token, ApiContext db)
+        {
+            var existingToken = db.OauthTokens.SingleOrDefault(n => n.Value == token);
+            return existingToken != null && existingToken.CanBeUsed();
+        }
+
+        private static bool IsValidTimestamp(string timestamp)
         {
             var now = ((DateTimeOffset)DateTime.Now).ToUnixTimeSeconds();
             var then = long.Parse(timestamp);
@@ -184,7 +211,7 @@ namespace OneRosterProviderDemo.Middlewares
             return Math.Abs(now - then) < 45 * 60;
         }
 
-        private bool LatchNonce(string nonce, ApiContext db)
+        private static bool LatchNonce(string nonce, ApiContext db)
         {
             var existingNonce = db.OauthNonces.SingleOrDefault(n => n.Value == nonce);
 
@@ -213,7 +240,7 @@ namespace OneRosterProviderDemo.Middlewares
         }
 
         // https://tools.ietf.org/html/rfc5849#section-3.4.1.2
-        private string SignatureBaseStringUri(HttpRequest request)
+        private static string SignatureBaseStringUri(HttpRequest request)
         {
             var protocolString = request.IsHttps ? "https://" : "http://";
             var domainString = request.Host.Host.ToLower();
@@ -243,7 +270,7 @@ namespace OneRosterProviderDemo.Middlewares
         }
 
         // https://tools.ietf.org/html/rfc5849#section-3.4.1.3.2
-        private string NormalizeParams(List<KeyValuePair<string, string>> kvpParams)
+        private static string NormalizeParams(List<KeyValuePair<string, string>> kvpParams)
         {
             IEnumerable<string> sortedParams =
               from p in kvpParams
@@ -254,7 +281,7 @@ namespace OneRosterProviderDemo.Middlewares
             return Uri.EscapeDataString(String.Join("&", sortedParams));
         }
         
-        private string GetUri(HttpRequest request)
+        private static string GetUri(HttpRequest request)
         {
             var builder = new UriBuilder
             {
@@ -267,7 +294,7 @@ namespace OneRosterProviderDemo.Middlewares
         }
 
         // https://tools.ietf.org/html/rfc5849#section-3.4.2
-        private string GenerateHmac(string msg, string hashMethod)
+        private static string GenerateHmac(string msg, string hashMethod)
         {
             byte[] keyBytes = Encoding.UTF8.GetBytes($"{Uri.EscapeDataString(OAUTH_CONSUMER_SECRET)}&");
             byte[] msgBytes = Encoding.UTF8.GetBytes(msg);
@@ -276,7 +303,8 @@ namespace OneRosterProviderDemo.Middlewares
             {
                 using (var sha1 = new HMACSHA1(keyBytes))
                 {
-                    return Uri.EscapeDataString(Convert.ToBase64String(sha1.ComputeHash(msgBytes)));
+                    var unescaped = Convert.ToBase64String(sha1.ComputeHash(msgBytes));
+                    return Uri.EscapeDataString(unescaped);
                 }
             }
             else

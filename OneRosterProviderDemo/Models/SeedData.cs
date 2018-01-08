@@ -121,10 +121,24 @@ namespace OneRosterProviderDemo.Models
                     CourseCode = "CAF304",
                     OrgId = "org-2",
                     Grades = new string[] { "13", "UG" },
-                    SubjectCodes = new string[] { "03098" }
+                    SubjectCodes = new string[] { "03098" },
+                    Resources = new string[] { "resource-1", "resource-2" }
+                },
+                new Course()
+                {
+                    Id = "course-2",
+                    UpdatedAt = DateTime.Now,
+                    CreatedAt = DateTime.Now,
+                    Status = Vocabulary.StatusType.active,
+                    Title = "Superheroes: Theory and Practice",
+                    SchoolYearAcademicSessionId = "academic-session-1",
+                    CourseCode = "SUP201",
+                    OrgId = "org-2",
+                    Grades = new string[] { "13", "UG" },
+                    SubjectCodes = new string[] { "15058", "15098" },
+                    Resources = new string[] { "resource-3" }
                 }
             );
-
 
             context.Klasses.AddRange(
                 new Klass()
@@ -141,7 +155,8 @@ namespace OneRosterProviderDemo.Models
                     SchoolOrgId = "org-2",
                     Grades = new string[] { "13", "UG" },
                     SubjectCodes = new string[] { "03098" },
-                    Periods = new string[] { "1" }
+                    Periods = new string[] { "1" },
+                    Resources = new string[] { "resource-4" }
                 },
                 new Klass()
                 {
@@ -438,6 +453,103 @@ namespace OneRosterProviderDemo.Models
                     Status = Vocabulary.StatusType.active,
                     UserId = "user-4",
                     OrgId = "org-2"
+                }
+            );
+
+            context.Demographics.AddRange(
+                new Demographic()
+                {
+                    Id = "user-1",
+                    UpdatedAt = DateTime.Now,
+                    CreatedAt = DateTime.Now,
+                    Status = Vocabulary.StatusType.active,
+                    Sex = Vocabulary.Gender.male,
+                    BirthDate = DateTime.MinValue,
+                    AmericanIndianOrAlaskaNative = true,
+                    CountryOfBirthCode = "US",
+                    StateOfBirthAbbreviation = "AK",
+                    CityOfBirth = "Juneau", 
+                    PublicSchoolResidenceStatus = "1652"
+                },
+                new Demographic()
+                {
+                    Id = "user-2",
+                    UpdatedAt = DateTime.Now,
+                    CreatedAt = DateTime.Now,
+                    Status = Vocabulary.StatusType.active,
+                    Sex = Vocabulary.Gender.female,
+                    BirthDate = DateTime.MinValue,
+                    White = true,
+                    CountryOfBirthCode = "US",
+                    StateOfBirthAbbreviation = "CA",
+                    CityOfBirth = "San Francisco", 
+                    PublicSchoolResidenceStatus = "1653"
+                },
+                new Demographic()
+                {
+                    Id = "user-3",
+                    UpdatedAt = DateTime.Now,
+                    CreatedAt = DateTime.Now,
+                    Status = Vocabulary.StatusType.active,
+                    Sex = Vocabulary.Gender.female,
+                    BirthDate = DateTime.MinValue,
+                    White = true,
+                    CountryOfBirthCode = "FR",
+                    CityOfBirth = "Paris",
+                    PublicSchoolResidenceStatus = "1653"
+                }
+            );
+
+            context.Resources.AddRange(
+                new Resource()
+                {
+                    Id = "resource-1",
+                    UpdatedAt = DateTime.Now,
+                    CreatedAt = DateTime.Now,
+                    Status = Vocabulary.StatusType.active,
+                    Title = "Fundamentals of Cappucino Analysis (1st Edition)",
+                    VendorResourceId = "vendor-resource-1",
+                    VendorId = "vendor-1",
+                    ApplicationId = "application-1",
+                    Importance = Vocabulary.Importance.primary,
+                    Roles = new Vocabulary.RoleType[] { Vocabulary.RoleType.teacher }
+                },
+                new Resource()
+                {
+                    Id = "resource-2",
+                    UpdatedAt = DateTime.Now,
+                    CreatedAt = DateTime.Now,
+                    Status = Vocabulary.StatusType.active,
+                    Title = "Espresso Dynamics (2nd Edition)",
+                    VendorResourceId = "vendor-resource-2",
+                    VendorId = "vendor-1",
+                    ApplicationId = "application-1",
+                    Importance = Vocabulary.Importance.secondary,
+                    Roles = new Vocabulary.RoleType[] { Vocabulary.RoleType.aide, Vocabulary.RoleType.administrator }
+                },
+                new Resource()
+                {
+                    Id = "resource-3",
+                    UpdatedAt = DateTime.Now,
+                    CreatedAt = DateTime.Now,
+                    Status = Vocabulary.StatusType.active,
+                    Title = "Journal of Superhero Science",
+                    VendorResourceId = "vendor-resource-3",
+                    VendorId = "vendor-2",
+                    ApplicationId = "application-1",
+                    Importance = Vocabulary.Importance.primary
+                },
+                new Resource()
+                {
+                    Id = "resource-4",
+                    UpdatedAt = DateTime.Now,
+                    CreatedAt = DateTime.Now,
+                    Status = Vocabulary.StatusType.active,
+                    Title = "Journal of Overcaffeinated Scientists",
+                    VendorResourceId = "vendor-resource-4",
+                    VendorId = "vendor-3",
+                    ApplicationId = "application-1",
+                    Importance = Vocabulary.Importance.secondary
                 }
             );
 

@@ -14,7 +14,7 @@ namespace Sds
     public class SdsManager
     {
         private static readonly HttpClient Client = new HttpClient();
-        private static string profileUrl = "testsds/synchronizationProfiles";
+        private static string profileUrl = "beta/education/synchronizationProfiles";
         private string _token;
 
         public SdsManager(string token)

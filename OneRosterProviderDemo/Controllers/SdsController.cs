@@ -157,7 +157,7 @@ namespace OneRosterProviderDemo.Controllers
                 }
                 else
                 {
-                    writer.WriteValue("#microsoft.graph.oneRosterApiDataProvider");
+                    writer.WriteValue("#microsoft.graph.educationcsvdataprovider");
 
                     writer.WritePropertyName("connectionUrl");
                     writer.WriteValue($"{(Request.IsHttps ? "https" : "http")}://{Request.Host}/ims/oneroster/v1p1");
@@ -171,11 +171,11 @@ namespace OneRosterProviderDemo.Controllers
 
                 writer.WriteEndObject();
 
-                writer.WritePropertyName("identitySyncConfiguration");
+                writer.WritePropertyName("identitySynchronizationConfiguration");
                 writer.WriteStartObject();
 
                 writer.WritePropertyName("@odata.type");
-                writer.WriteValue("#microsoft.graph.identityCreationConfiguration");
+                writer.WriteValue("#microsoft.graph.educationidentitycreationconfiguration");
 
                 writer.WritePropertyName("userDomains");
                 writer.WriteStartArray();
@@ -207,7 +207,8 @@ namespace OneRosterProviderDemo.Controllers
 
                 writer.WritePropertyName("skuIds");
                 writer.WriteStartArray();
-                writer.WriteValue(skus.Item1);
+                if(skus.Item1 != null)
+                    writer.WriteValue(skus.Item1);
                 writer.WriteEndArray();
                 writer.WriteEndObject();
 
@@ -217,7 +218,8 @@ namespace OneRosterProviderDemo.Controllers
 
                 writer.WritePropertyName("skuIds");
                 writer.WriteStartArray();
-                writer.WriteValue(skus.Item2);
+                if(skus.Item2 != null)
+                    writer.WriteValue(skus.Item2);
                 writer.WriteEndArray();
                 writer.WriteEndObject();
 

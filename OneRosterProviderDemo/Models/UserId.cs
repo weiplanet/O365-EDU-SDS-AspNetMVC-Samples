@@ -22,7 +22,7 @@ namespace OneRosterProviderDemo.Models
             writer.WriteValue(Identifier);
 
             writer.WriteEndObject();
-            writer.Flush();
+
         }
     }
 }

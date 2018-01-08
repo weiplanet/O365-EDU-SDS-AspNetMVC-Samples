@@ -31,7 +31,7 @@ namespace OneRosterProviderDemo.Controllers
             studentQuery = ApplyBinding(studentQuery);
             var students = studentQuery.ToList();
 
-            serializer = new Serializers.OneRosterSerializer("users");
+            serializer = new OneRosterSerializer("users");
             serializer.writer.WriteStartArray();
             foreach (var student in students)
             {
@@ -59,6 +59,37 @@ namespace OneRosterProviderDemo.Controllers
             serializer = new OneRosterSerializer("user");
             student.AsJson(serializer.writer, BaseUrl());
 
+            return JsonOk(serializer.Finish());
+        }
+
+        // GET ims/oneroster/v1p1/students/{student_id}/classes
+        [HttpGet("{id}/classes")]
+        public IActionResult GetClassesForStudent([FromRoute] string id)
+        {
+            var student = db.Users
+                .Include(u => u.UserOrgs).ThenInclude(uo => uo.Org)
+                .Include(u => u.UserAgents).ThenInclude(ua => ua.Agent)
+                .Include(u => u.Enrollments).ThenInclude(e => e.Klass)
+                    .ThenInclude(k => k.KlassAcademicSessions)
+                        .ThenInclude(kas => kas.AcademicSession)
+                .Include(u => u.Enrollments).ThenInclude(e => e.Klass)
+                    .ThenInclude(k => k.Course)
+                .Include(u => u.Enrollments).ThenInclude(e => e.Klass)
+                    .ThenInclude(k => k.School)
+                .SingleOrDefault(u => u.Id == id && u.Role == Vocabulary.RoleType.student);
+
+            if(student == null || !student.Enrollments.Any())
+            {
+                return NotFound();
+            }
+
+            serializer = new OneRosterSerializer("classes");
+            serializer.writer.WriteStartArray();
+            foreach(var enrollment in student.Enrollments)
+            {
+                enrollment.Klass.AsJson(serializer.writer, BaseUrl());
+            }
+            serializer.writer.WriteEndArray();
             return JsonOk(serializer.Finish());
         }
     }

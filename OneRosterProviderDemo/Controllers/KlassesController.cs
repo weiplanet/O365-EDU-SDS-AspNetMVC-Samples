@@ -233,5 +233,45 @@ namespace OneRosterProviderDemo.Controllers
 
             return JsonOk(FinishSerialization(), ResponseCount);
         }
+
+        // GET ims/oneroster/v1p1/classes/5/resources
+        [HttpGet("{id}/resources")]
+        public IActionResult GetResourcesForClass([FromRoute] string id)
+        {
+            var klass = db.Klasses
+                .Include(k => k.Course)
+                .SingleOrDefault(k => k.Id == id);
+
+            if (klass == null)
+            {
+                return NotFound();
+            }
+
+            serializer = new Serializers.OneRosterSerializer("resources");
+            serializer.writer.WriteStartArray();
+
+            if (klass.Course != null && klass.Course.Resources != null)
+            {
+                foreach (var resourceId in klass.Course.Resources)
+                {
+                    var resource = db.Resources
+                        .SingleOrDefault(r => r.Id == resourceId);
+                    resource.AsJson(serializer.writer, BaseUrl());
+                }
+            }
+
+            if (klass.Resources != null)
+            {
+                foreach (var resourceId in klass.Resources)
+                {
+                    var resource = db.Resources
+                        .SingleOrDefault(r => r.Id == resourceId);
+                    resource.AsJson(serializer.writer, BaseUrl());
+                }
+            }
+
+            serializer.writer.WriteEndArray();
+            return JsonOk(FinishSerialization(), ResponseCount);
+        }
     }
 }

@@ -69,6 +69,18 @@ namespace OneRosterProviderDemo.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "OauthTokens",
+                columns: table => new
+                {
+                    Value = table.Column<string>(type: "TEXT", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "TEXT", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_OauthTokens", x => x.Value);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Orgs",
                 columns: table => new
                 {
@@ -114,7 +126,8 @@ namespace OneRosterProviderDemo.Migrations
                     Status = table.Column<int>(type: "INTEGER", nullable: false),
                     UpdatedAt = table.Column<DateTime>(type: "TEXT", nullable: false),
                     Username = table.Column<string>(type: "TEXT", nullable: false),
-                    _grades = table.Column<string>(type: "TEXT", nullable: true)
+                    _grades = table.Column<string>(type: "TEXT", nullable: true),
+                    _userIds = table.Column<string>(type: "TEXT", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -135,7 +148,8 @@ namespace OneRosterProviderDemo.Migrations
                     Title = table.Column<string>(type: "TEXT", nullable: false),
                     UpdatedAt = table.Column<DateTime>(type: "TEXT", nullable: false),
                     _grades = table.Column<string>(type: "TEXT", nullable: true),
-                    _subjectCodes = table.Column<string>(type: "TEXT", nullable: true)
+                    _subjectCodes = table.Column<string>(type: "TEXT", nullable: true),
+                    _resources = table.Column<string>(type: "TEXT", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -229,7 +243,8 @@ namespace OneRosterProviderDemo.Migrations
                     UpdatedAt = table.Column<DateTime>(type: "TEXT", nullable: false),
                     _grades = table.Column<string>(type: "TEXT", nullable: true),
                     _periods = table.Column<string>(type: "TEXT", nullable: true),
-                    _subjectCodes = table.Column<string>(type: "TEXT", nullable: true)
+                    _subjectCodes = table.Column<string>(type: "TEXT", nullable: true),
+                    _resources = table.Column<string>(type: "TEXT", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -391,7 +406,54 @@ namespace OneRosterProviderDemo.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
+            migrationBuilder.CreateTable(
+                name: "Resources",
+                columns: table => new
+                {
+                    Id = table.Column<string>(type: "TEXT", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    Metadata = table.Column<string>(type: "TEXT", nullable: true),
+                    Status = table.Column<int>(type: "INTEGER", nullable: false),
+                    UpdatedAt = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    Title = table.Column<string>(type: "TEXT", nullable: true),
+                    Importance = table.Column<int>(type: "TEXT", nullable: true),
+                    VendorResourceId = table.Column<string>(type: "TEXT", nullable: false),
+                    VendorId = table.Column<string>(type: "TEXT", nullable: true),
+                    ApplicationId = table.Column<string>(type: "TEXT", nullable: true),
+                    _roles = table.Column<string>(type: "TEXT", nullable: true)
+                },
+                constraints: table => 
+                {
+                    table.PrimaryKey("PK_Resources", x => x.Id);
+                });
 
+            migrationBuilder.CreateTable(
+                name: "Demographics",
+                columns: table => new
+                {
+                    Id = table.Column<string>(type: "TEXT", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    Metadata = table.Column<string>(type: "TEXT", nullable: true),
+                    Status = table.Column<int>(type: "INTEGER", nullable: false),
+                    UpdatedAt = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    BirthDate = table.Column<DateTime>(type: "TEXT", nullable: true),
+                    Sex = table.Column<Vocabulary.Gender>(type: "TEXT", nullable: true),
+                    AmericanIndianOrAlaskaNative = table.Column<bool>(type: "TEXT", nullable: true),
+                    Asian = table.Column<bool>(type: "TEXT", nullable: true),
+                    BlackOrAfricanAmerican = table.Column<bool>(type: "TEXT", nullable: true),
+                    NativeHawaiianOrOtherPacificIslander = table.Column<bool>(type: "TEXT", nullable: true),
+                    White = table.Column<bool>(type: "TEXT", nullable: true),
+                    DemographicRaceTwoOrMoreRaces = table.Column<bool>(type: "TEXT", nullable: true),
+                    HispanicOrLatinoEthnicity = table.Column<bool>(type: "TEXT", nullable: true),
+                    CountryOfBirthCode = table.Column<string>(type: "TEXT", nullable: true),
+                    StateOfBirthAbbreviation = table.Column<string>(type: "TEXT", nullable: true),
+                    CityOfBirth = table.Column<string>(type: "TEXT", nullable: true),
+                    PublicSchoolResidenceStatus = table.Column<string>(type: "TEXT", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Demographic", x => x.Id);
+                });
             migrationBuilder.CreateIndex(
                 name: "IX_AcademicSessions_ParentAcademicSessionId",
                 table: "AcademicSessions",
@@ -505,6 +567,9 @@ namespace OneRosterProviderDemo.Migrations
                 name: "OauthNonces");
 
             migrationBuilder.DropTable(
+                name: "OauthTokens");
+
+            migrationBuilder.DropTable(
                 name: "Results");
 
             migrationBuilder.DropTable(
@@ -533,6 +598,12 @@ namespace OneRosterProviderDemo.Migrations
 
             migrationBuilder.DropTable(
                 name: "AcademicSessions");
+
+            migrationBuilder.DropTable(
+                name: "Demographics");
+
+            migrationBuilder.DropTable(
+                name: "Resources");
         }
     }
 }
