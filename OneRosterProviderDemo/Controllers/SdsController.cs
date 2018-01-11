@@ -153,7 +153,7 @@ namespace OneRosterProviderDemo.Controllers
 
                 if (profileType == "csv")
                 {
-                    writer.WriteValue("#microsoft.graph.csvDataProvider");
+                    writer.WriteValue("#microsoft.graph.educationCsvDataProvider");
                 }
                 else
                 {

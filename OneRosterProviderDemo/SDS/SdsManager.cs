@@ -71,7 +71,10 @@ namespace Sds
 
         public async Task<string> GetCsvUploadUrl(string profileId)
         {
-            var res = await QueryProfileAsync(profileId);
+            var req = new HttpRequestMessage(HttpMethod.Get, $"https://graph.microsoft.com/{profileUrl}/{profileId}/uploadUrl");
+            req.Headers.Authorization = new AuthenticationHeaderValue("Bearer", _token);
+
+            var res = await Client.SendAsync(req);
             var parsed = JObject.Parse(await res.Content.ReadAsStringAsync());
             return (string)parsed["value"];
         }
