@@ -172,7 +172,6 @@ This web application is based on an ASP.NET Core Web project template.
 The `Middlewares/OAuth.cs` file defines a middleware that validates the OAuth1 or OAuth2 signature for each incoming request with a OneRoster route.  This file also contains the hard-coded client ID and secret.
 In order to make OAuth2 requests, first visit the /token endpoint using OAuth1 credentials to get the access token.
 The `Startup.cs` file configures the app to use this middleware.
-While the OneRoster v1.1 spec allows for OAuth2 bearer token authorization, it is not supported in this sample.
 
 #### SDS Profile Management
 The `Startup.cs` file configures the app to use .NET Core's OpenIDConnect (oidc) library.  This flow is handled by `AccountController`.
@@ -187,12 +186,12 @@ Most of the OneRoster models have a corresponding model class in the `Models` di
 | Academic Session       | AcademicSession   |
 | Class                  | IMSClass          |
 | Course                 | Course            |
-| Demographic Data       | { not supported } |
+| Demographic Data       | Demographic       |
 | Enrollment             | Enrollment        |
 | Line Item              | LineItem          |
 | Line Item Category     | LineItemCategory  |
 | Org                    | Org               |
-| Resource               | { not supported } |
+| Resource               | Resource          |
 | Result                 | Result            |
 | User, Student, Teacher | User              |
 
@@ -252,26 +251,44 @@ There are three OneRoster v1.1 service subsets, defined [here](https://www.imsgl
 | getAcademicSession             | /academicSessions/{id}                              | GET       |
 | getAllClasses                  | /classes                                            | GET       |
 | getClass                       | /classes/{id}                                       | GET       |
+| getStudentsForClass            | /classes/{class_id}/students                        | GET       |
+| getTeachersForClass            | /classes/{class_id}/teachers                        | GET       |
 | getAllCourses                  | /courses                                            | GET       |
 | getCourse                      | /courses/{id}                                       | GET       |
-| getAllGradingPeriods           | /gradingPeriods                                     | GET       |
-| getGradingPeriod               | /gradingPeriods/{id}                                | GET       |
+| getClassesForCourse            | /courses/{course_id}/classes                        | GET       |
+| getAllDemographics             | /demographics                                       | GET       |
+| getDemographics                | /demographics/{id}                                  | GET       |
 | getAllEnrollments              | /enrollments                                        | GET       |
 | getEnrollment                  | /enrollments/{id}                                   | GET       |
+| getAllGradingPeriods           | /gradingPeriods                                     | GET       |
+| getGradingPeriod               | /gradingPeriods/{id}                                | GET       |
 | getAllOrgs                     | /orgs                                               | GET       |
 | getOrg                         | /orgs/{id}                                          | GET       |
 | getAllSchools                  | /schools                                            | GET       |
 | getSchool                      | /schools/{id}                                       | GET       |
+| getCoursesForSchool            | /schools/{id}/courses                               | GET       |
+| getClassesForSchool            | /schools/{school_id}/classes                        | GET       |
+| getEnrollmentsForSchool        | /schools/{school_id}/enrollments                    | GET       |
+| getEnrollmentsForClassInSchool | /schools/{school_id}/classes/class_id}/enrollments  | GET       |
+| getStudentsForClassInSchool    | /schools/{school_id}/classes/{class_id}/students    | GET       |
+| getStudentsForSchool           | /schools/{school_id}/students                       | GET       |
+| getTeachersForClassInSchool    | /schools/{school_id}/classes/{class_id}/teachers    | GET       |
+| getTeachersForSchool           | /schools/{school_id}/teachers                       | GET       |
+| getTermsForSchool              | /schools/{school_id}/terms                          | GET       |
 | getAllStudents                 | /students                                           | GET       |
 | getStudent                     | /students/{id}                                      | GET       |
+| getClassesForStudent           | /students/{id}/classes                              | GET       |
 | getAllTeachers                 | /teachers                                           | GET       |
 | getTeacher                     | /teachers/{id}                                      | GET       |
+| getClassesForTeacher           | /teachers/{id}/classes                              | GET       |
 | getAllTerms                    | /terms                                              | GET       |
 | getTerm                        | /terms/{id}                                         | GET       |
+| getClassesForTerm              | /terms/{id}/classes                                 | GET       |
+| getGradingPeriodsForTerm       | /terms/{id}/gradingPeriods                          | GET       |
 | getAllUsers                    | /users                                              | GET       |
 | getUser                        | /users/{id}                                         | GET       |
-| getStudentsForClass            | /classes/{class_id}/students                        | GET       |
-| getTeachersForClass            | /classes/{class_id}/teachers                        | GET       |
+| getClassesForUser              | /users/{id}/classes                                 | GET       |
+
 
 ### Gradebook Endpoints (Read)
 
@@ -328,4 +345,4 @@ contact [opencode@microsoft.com](mailto:opencode@microsoft.com) with any additio
 
 
 
-**Copyright (c) 2017 Microsoft. All rights reserved.**
+**Copyright (c) 2018 Microsoft. All rights reserved.**
