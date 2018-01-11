@@ -71,20 +71,20 @@ namespace OneRosterProviderDemo.Controllers
                 return NotFound();
             }
 
-            IQueryable<Klass> klassQuery = db.Klasses
+            IQueryable<IMSClass> imsClassQuery = db.IMSClasses
                 .Include(k => k.Enrollments).ThenInclude(e => e.User)
-                .Include(k => k.Enrollments).ThenInclude(e => e.Klass.Course)
-                .Include(k => k.Enrollments).ThenInclude(e => e.Klass.School)
-                .Include(k => k.Enrollments).ThenInclude(e => e.Klass.KlassAcademicSessions).ThenInclude(kas => kas.AcademicSession)
+                .Include(k => k.Enrollments).ThenInclude(e => e.IMSClass.Course)
+                .Include(k => k.Enrollments).ThenInclude(e => e.IMSClass.School)
+                .Include(k => k.Enrollments).ThenInclude(e => e.IMSClass.IMSClassAcademicSessions).ThenInclude(kas => kas.AcademicSession)
                 .Where(k => k.Enrollments.Where(e => e.UserId == id && e.Role == Vocabulary.RoleType.teacher).Count() > 0);
-            klassQuery = ApplyBinding(klassQuery);
-            var klasses = klassQuery.ToList();
+            imsClassQuery = ApplyBinding(imsClassQuery);
+            var imsClasses = imsClassQuery.ToList();
 
             serializer = new OneRosterSerializer("classes");
             serializer.writer.WriteStartArray();
-            foreach (var klass in klasses)
+            foreach (var imsClass in imsClasses)
             {
-                klass.AsJson(serializer.writer, BaseUrl());
+                imsClass.AsJson(serializer.writer, BaseUrl());
             }
             serializer.writer.WriteEndArray();
 

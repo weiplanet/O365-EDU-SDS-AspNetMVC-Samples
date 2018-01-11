@@ -33,7 +33,7 @@ namespace OneRosterProviderDemo.Serializers
                 WriteFileEntry(archive, "manifest.csv", Manifest());
                 WriteFileEntry(archive, "academicSessions.csv", AcademicSessions());
                 WriteFileEntry(archive, "categories.csv", Categories());
-                WriteFileEntry(archive, "classes.csv", Klasses());
+                WriteFileEntry(archive, "classes.csv", IMSClasses());
                 WriteFileEntry(archive, "courses.csv", Courses());
                 WriteFileEntry(archive, "enrollments.csv", Enrollments());
                 WriteFileEntry(archive, "lineItems.csv", LineItems());
@@ -142,10 +142,10 @@ namespace OneRosterProviderDemo.Serializers
             }
         }
 
-        private string Klasses()
+        private string IMSClasses()
         {
-            var klasses = db.Klasses
-                .Include(k => k.KlassAcademicSessions)
+            var imsClasses = db.IMSClasses
+                .Include(k => k.IMSClassAcademicSessions)
                     .ThenInclude(kas => kas.AcademicSession)
                 .Include(k => k.Course)
                 .Include(k => k.School);
@@ -153,10 +153,10 @@ namespace OneRosterProviderDemo.Serializers
             var sb = new StringBuilder();
             using (var csv = new CsvWriter(new StringWriter(sb)))
             {
-                Klass.CsvHeader(csv);
-                foreach (var klass in klasses)
+                IMSClass.CsvHeader(csv);
+                foreach (var imsClass in imsClasses)
                 {
-                    klass.AsCsvRow(csv);
+                    imsClass.AsCsvRow(csv);
                 }
                 return sb.ToString();
             }
@@ -186,7 +186,7 @@ namespace OneRosterProviderDemo.Serializers
         {
             var enrollments = db.Enrollments
                 .Include(e => e.User)
-                .Include(e => e.Klass)
+                .Include(e => e.IMSClass)
                 .Include(e => e.School);
 
             var sb = new StringBuilder();

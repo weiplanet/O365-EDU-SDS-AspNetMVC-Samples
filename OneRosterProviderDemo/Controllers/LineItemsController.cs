@@ -28,7 +28,7 @@ namespace OneRosterProviderDemo.Controllers
         {
             IQueryable<LineItem> lineItemsQuery = db.LineItems
                 .Include(li => li.LineItemCategory)
-                .Include(li => li.Klass)
+                .Include(li => li.IMSClass)
                 .Include(li => li.AcademicSession);
             lineItemsQuery = ApplyBinding(lineItemsQuery);
             var lineItems = lineItemsQuery.ToList();
@@ -50,7 +50,7 @@ namespace OneRosterProviderDemo.Controllers
         {
             var lineItem = db.LineItems
                 .Include(li => li.LineItemCategory)
-                .Include(li => li.Klass)
+                .Include(li => li.IMSClass)
                 .Include(li => li.AcademicSession)
                 .SingleOrDefault(li => li.Id == id);
 
@@ -117,7 +117,7 @@ namespace OneRosterProviderDemo.Controllers
 
                 db.LineItems
                     .Include(li => li.AcademicSession)
-                    .Include(li => li.Klass)
+                    .Include(li => li.IMSClass)
                     .Include(li => li.LineItemCategory)
                     .Where(li => li.Id == id)
                     .First();

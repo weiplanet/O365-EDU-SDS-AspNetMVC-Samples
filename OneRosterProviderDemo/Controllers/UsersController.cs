@@ -81,19 +81,19 @@ namespace OneRosterProviderDemo.Controllers
 
             // get all Enrollments for the given userId
             var enrollments = db.Enrollments
-                .Include(e => e.Klass)
-                    .ThenInclude(k => k.KlassAcademicSessions)
+                .Include(e => e.IMSClass)
+                    .ThenInclude(k => k.IMSClassAcademicSessions)
                         .ThenInclude(kas => kas.AcademicSession)
-                .Include(e => e.Klass)
+                .Include(e => e.IMSClass)
                     .ThenInclude(k => k.Course)
-                .Include(e => e.Klass)
+                .Include(e => e.IMSClass)
                     .ThenInclude(k => k.School)
                 .Where(e => e.UserId == id);
             serializer = new Serializers.OneRosterSerializer("classes");
             serializer.writer.WriteStartArray();
             foreach (var enrollment in enrollments)
             {
-                enrollment.Klass.AsJson(serializer.writer, BaseUrl());
+                enrollment.IMSClass.AsJson(serializer.writer, BaseUrl());
             }
             serializer.writer.WriteEndArray();
 

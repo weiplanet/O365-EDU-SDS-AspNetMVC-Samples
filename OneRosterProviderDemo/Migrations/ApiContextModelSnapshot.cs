@@ -101,7 +101,7 @@ namespace OneRosterProviderDemo.Migrations
 
                     b.Property<DateTime>("EndDate");
 
-                    b.Property<string>("KlassId")
+                    b.Property<string>("IMSClassId")
                         .IsRequired();
 
                     b.Property<string>("Metadata");
@@ -122,7 +122,7 @@ namespace OneRosterProviderDemo.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("KlassId");
+                    b.HasIndex("IMSClassId");
 
                     b.HasIndex("SchoolOrgId");
 
@@ -131,14 +131,14 @@ namespace OneRosterProviderDemo.Migrations
                     b.ToTable("Enrollments");
                 });
 
-            modelBuilder.Entity("OneRosterProviderDemo.Models.Klass", b =>
+            modelBuilder.Entity("OneRosterProviderDemo.Models.IMSClass", b =>
                 {
                     b.Property<string>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<string>("ClassCode");
+                    b.Property<string>("IMSClassCode");
 
-                    b.Property<int>("ClassType");
+                    b.Property<int>("IMSClassType");
 
                     b.Property<string>("CourseId")
                         .IsRequired();
@@ -171,10 +171,10 @@ namespace OneRosterProviderDemo.Migrations
 
                     b.HasIndex("SchoolOrgId");
 
-                    b.ToTable("Klasses");
+                    b.ToTable("IMSClasses");
                 });
 
-            modelBuilder.Entity("OneRosterProviderDemo.Models.KlassAcademicSession", b =>
+            modelBuilder.Entity("OneRosterProviderDemo.Models.IMSClassAcademicSession", b =>
                 {
                     b.Property<string>("Id")
                         .ValueGeneratedOnAdd();
@@ -183,7 +183,7 @@ namespace OneRosterProviderDemo.Migrations
 
                     b.Property<DateTime>("CreatedAt");
 
-                    b.Property<string>("KlassId");
+                    b.Property<string>("IMSClassId");
 
                     b.Property<string>("Metadata");
 
@@ -195,9 +195,9 @@ namespace OneRosterProviderDemo.Migrations
 
                     b.HasIndex("AcademicSessionId");
 
-                    b.HasIndex("KlassId");
+                    b.HasIndex("IMSClassId");
 
-                    b.ToTable("KlassAcademicSessions");
+                    b.ToTable("IMSClassAcademicSessions");
                 });
 
             modelBuilder.Entity("OneRosterProviderDemo.Models.LineItem", b =>
@@ -216,7 +216,7 @@ namespace OneRosterProviderDemo.Migrations
 
                     b.Property<DateTime>("DueDate");
 
-                    b.Property<string>("KlassId")
+                    b.Property<string>("IMSClassId")
                         .IsRequired();
 
                     b.Property<string>("LineItemCategoryId")
@@ -239,7 +239,7 @@ namespace OneRosterProviderDemo.Migrations
 
                     b.HasIndex("AcademicSessionId");
 
-                    b.HasIndex("KlassId");
+                    b.HasIndex("IMSClassId");
 
                     b.HasIndex("LineItemCategoryId");
 
@@ -464,9 +464,9 @@ namespace OneRosterProviderDemo.Migrations
 
             modelBuilder.Entity("OneRosterProviderDemo.Models.Enrollment", b =>
                 {
-                    b.HasOne("OneRosterProviderDemo.Models.Klass", "Klass")
+                    b.HasOne("OneRosterProviderDemo.Models.IMSClass", "IMSClass")
                         .WithMany("Enrollments")
-                        .HasForeignKey("KlassId")
+                        .HasForeignKey("IMSClassId")
                         .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("OneRosterProviderDemo.Models.Org", "School")
@@ -480,7 +480,7 @@ namespace OneRosterProviderDemo.Migrations
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
-            modelBuilder.Entity("OneRosterProviderDemo.Models.Klass", b =>
+            modelBuilder.Entity("OneRosterProviderDemo.Models.IMSClass", b =>
                 {
                     b.HasOne("OneRosterProviderDemo.Models.Course", "Course")
                         .WithMany()
@@ -493,15 +493,15 @@ namespace OneRosterProviderDemo.Migrations
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
-            modelBuilder.Entity("OneRosterProviderDemo.Models.KlassAcademicSession", b =>
+            modelBuilder.Entity("OneRosterProviderDemo.Models.IMSClassAcademicSession", b =>
                 {
                     b.HasOne("OneRosterProviderDemo.Models.AcademicSession", "AcademicSession")
                         .WithMany()
                         .HasForeignKey("AcademicSessionId");
 
-                    b.HasOne("OneRosterProviderDemo.Models.Klass", "Klass")
-                        .WithMany("KlassAcademicSessions")
-                        .HasForeignKey("KlassId");
+                    b.HasOne("OneRosterProviderDemo.Models.IMSClass", "IMSClass")
+                        .WithMany("IMSClassAcademicSessions")
+                        .HasForeignKey("IMSClassId");
                 });
 
             modelBuilder.Entity("OneRosterProviderDemo.Models.LineItem", b =>
@@ -511,9 +511,9 @@ namespace OneRosterProviderDemo.Migrations
                         .HasForeignKey("AcademicSessionId")
                         .OnDelete(DeleteBehavior.Cascade);
 
-                    b.HasOne("OneRosterProviderDemo.Models.Klass", "Klass")
+                    b.HasOne("OneRosterProviderDemo.Models.IMSClass", "IMSClass")
                         .WithMany()
-                        .HasForeignKey("KlassId")
+                        .HasForeignKey("IMSClassId")
                         .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("OneRosterProviderDemo.Models.LineItemCategory", "LineItemCategory")

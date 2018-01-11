@@ -64,23 +64,23 @@ namespace OneRosterProviderDemo.Controllers
         [HttpGet("{id}/classes")]
         public IActionResult GetClassesForCourse([FromRoute] string id)
         {
-            var klasses = db.Klasses
-                .Include(k => k.KlassAcademicSessions)
-                    .ThenInclude(kas => kas.AcademicSession)
-                .Include(k => k.Course)
-                .Include(k => k.School)
-                .Where(k => k.CourseId == id);
+            var imsClasses = db.IMSClasses
+                .Include(c => c.IMSClassAcademicSessions)
+                    .ThenInclude(cas => cas.AcademicSession)
+                .Include(c => c.Course)
+                .Include(c => c.School)
+                .Where(c => c.CourseId == id);
 
-            if (!klasses.Any())
+            if (!imsClasses.Any())
             {
                 return NotFound();
             }
 
             serializer = new OneRosterSerializer("resources");
             serializer.writer.WriteStartArray();
-            foreach (var klass in klasses)
+            foreach (var imsClass in imsClasses)
             {
-                klass.AsJson(serializer.writer, BaseUrl());
+                imsClass.AsJson(serializer.writer, BaseUrl());
             }
             serializer.writer.WriteEndArray();
             return JsonOk(serializer.Finish());

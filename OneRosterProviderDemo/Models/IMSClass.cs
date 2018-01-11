@@ -17,7 +17,7 @@ using System.Text;
 
 namespace OneRosterProviderDemo.Models
 {
-    public class Klass : BaseModel
+    public class IMSClass : BaseModel
     {
         internal override string ModelType()
         {
@@ -31,10 +31,10 @@ namespace OneRosterProviderDemo.Models
         [Required]
         public string Title { get; set; }
 
-        public string ClassCode { get; set; }
+        public string IMSClassCode { get; set; }
 
         [Required]
-        public KlassType ClassType { get; set; }
+        public IMSClassType IMSClassType { get; set; }
 
         public string Location { get; set; }
 
@@ -49,7 +49,7 @@ namespace OneRosterProviderDemo.Models
 
         // "terms"
         [NotEmptyCollection]
-        public virtual List<KlassAcademicSession> KlassAcademicSessions { get; set; } 
+        public virtual List<IMSClassAcademicSession> IMSClassAcademicSessions { get; set; } 
 
         public virtual List<Enrollment> Enrollments { get; set; }
 
@@ -103,14 +103,14 @@ namespace OneRosterProviderDemo.Models
             writer.WritePropertyName("title");
             writer.WriteValue(Title);
 
-            if(!String.IsNullOrEmpty(ClassCode))
+            if(!String.IsNullOrEmpty(IMSClassCode))
             {
                 writer.WritePropertyName("classCode");
-                writer.WriteValue(ClassCode);
+                writer.WriteValue(IMSClassCode);
             }
 
             writer.WritePropertyName("classType");
-            writer.WriteValue(Enum.GetName(typeof(Vocabulary.KlassType), ClassType));
+            writer.WriteValue(Enum.GetName(typeof(Vocabulary.IMSClassType), IMSClassType));
 
             if (!String.IsNullOrEmpty(Location))
             {
@@ -166,7 +166,7 @@ namespace OneRosterProviderDemo.Models
 
             writer.WritePropertyName("terms");
             writer.WriteStartArray();
-            KlassAcademicSessions.ForEach(join => join.AcademicSession.AsJsonReference(writer, baseUrl));
+            IMSClassAcademicSessions.ForEach(join => join.AcademicSession.AsJsonReference(writer, baseUrl));
             writer.WriteEndArray();
 
             if (SubjectCodes != null && SubjectCodes.Length > 0)
@@ -221,11 +221,11 @@ namespace OneRosterProviderDemo.Models
             writer.WriteField(Title);
             writer.WriteField(String.Join(',', Grades));
             writer.WriteField(CourseId);
-            writer.WriteField(ClassCode);
-            writer.WriteField(ClassType);
+            writer.WriteField(IMSClassCode);
+            writer.WriteField(IMSClassType);
             writer.WriteField(Location);
             writer.WriteField(SchoolOrgId);
-            writer.WriteField(String.Join(',', KlassAcademicSessions.Select(kas => kas.AcademicSessionId)));
+            writer.WriteField(String.Join(',', IMSClassAcademicSessions.Select(kas => kas.AcademicSessionId)));
             writer.WriteField(String.Join(',', Subjects));
             writer.WriteField(String.Join(',', SubjectCodes));
             writer.WriteField(String.Join(',', Periods));

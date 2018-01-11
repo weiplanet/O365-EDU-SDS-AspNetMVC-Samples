@@ -97,9 +97,9 @@ namespace OneRosterProviderDemo.Controllers
         {
             var enrollments = db.Enrollments
                 .Include(e => e.User)
-                .Include(e => e.Klass)
+                .Include(e => e.IMSClass)
                 .Include(e => e.School)
-                .Where(e => e.Klass.SchoolOrgId == id);
+                .Where(e => e.IMSClass.SchoolOrgId == id);
 
             if(!enrollments.Any())
             {
@@ -121,23 +121,23 @@ namespace OneRosterProviderDemo.Controllers
         [HttpGet("{id}/classes")]
         public IActionResult GetClassesForSchool([FromRoute] string id)
         {
-            var klasses = db.Klasses
-                .Include(k => k.KlassAcademicSessions)
+            var imsClasses = db.IMSClasses
+                .Include(c => c.IMSClassAcademicSessions)
                     .ThenInclude(kas => kas.AcademicSession)
-                .Include(k => k.Course)
-                .Include(k => k.School)
-                .Where(k => k.SchoolOrgId == id);
+                .Include(c => c.Course)
+                .Include(c => c.School)
+                .Where(c => c.SchoolOrgId == id);
 
-            if(!klasses.Any())
+            if(!imsClasses.Any())
             {
                 return NotFound();
             }
 
             serializer = new OneRosterSerializer("classes");
             serializer.writer.WriteStartArray();
-            foreach (var klass in klasses)
+            foreach (var imsClass in imsClasses)
             {
-                klass.AsJson(serializer.writer, BaseUrl());
+                imsClass.AsJson(serializer.writer, BaseUrl());
             }
             serializer.writer.WriteEndArray();
             return JsonOk(serializer.Finish());
@@ -232,24 +232,24 @@ namespace OneRosterProviderDemo.Controllers
         [HttpGet("{schoolId}/classes/{classId}/enrollments")]
         public IActionResult GetEnrollmentsForClassInSchool([FromRoute] string schoolId, string classId)
         {
-            var klass = db.Klasses
-                .Where(k => k.SchoolOrgId == schoolId)
-                .Include(k => k.Enrollments)
+            var imsClass = db.IMSClasses
+                .Where(c => c.SchoolOrgId == schoolId)
+                .Include(c => c.Enrollments)
                     .ThenInclude(e => e.User)
-                .Include(k => k.Enrollments)
-                    .ThenInclude(e => e.Klass)
-                .Include(k => k.Enrollments)
+                .Include(c => c.Enrollments)
+                    .ThenInclude(e => e.IMSClass)
+                .Include(c => c.Enrollments)
                     .ThenInclude(e => e.School)
-                .SingleOrDefault(k => k.Id == classId);
+                .SingleOrDefault(c => c.Id == classId);
 
-            if(klass == null)
+            if(imsClass == null)
             {
                 return NotFound();
             }
 
             serializer = new OneRosterSerializer("enrollments");
             serializer.writer.WriteStartArray();
-            foreach (var enrollment in klass.Enrollments)
+            foreach (var enrollment in imsClass.Enrollments)
             {
                 enrollment.AsJson(serializer.writer, BaseUrl());
             }
@@ -261,26 +261,26 @@ namespace OneRosterProviderDemo.Controllers
         [HttpGet("{schoolId}/classes/{classId}/students")]
         public IActionResult GetStudentsForClassInSchool([FromRoute] string schoolId, string classId)
         {
-            var klass = db.Klasses
-                .Where(k => k.SchoolOrgId == schoolId)
-                .Include(k => k.Enrollments)
+            var imsClass = db.IMSClasses
+                .Where(c => c.SchoolOrgId == schoolId)
+                .Include(c => c.Enrollments)
                     .ThenInclude(e => e.User)
                         .ThenInclude(u => u.UserOrgs)
                             .ThenInclude(uo => uo.Org)
-                .Include(k => k.Enrollments)
+                .Include(c => c.Enrollments)
                     .ThenInclude(e => e.User)
                         .ThenInclude(u => u.UserAgents)
                             .ThenInclude(ua => ua.Agent)
-                .SingleOrDefault(k => k.Id == classId);
+                .SingleOrDefault(c => c.Id == classId);
 
-            if(klass == null)
+            if(imsClass == null)
             {
                 return NotFound();
             }
 
             serializer = new OneRosterSerializer("students");
             serializer.writer.WriteStartArray();
-            foreach (var enrollment in klass.Enrollments)
+            foreach (var enrollment in imsClass.Enrollments)
             {
                 var user = enrollment.User;
                 if(user.Role == Vocabulary.RoleType.student)
@@ -296,26 +296,26 @@ namespace OneRosterProviderDemo.Controllers
         [HttpGet("{schoolId}/classes/{classId}/teachers")]
         public IActionResult GetTeachersForClassInSchool([FromRoute] string schoolId, string classId)
         {
-            var klass = db.Klasses
-                .Where(k => k.SchoolOrgId == schoolId)
-                .Include(k => k.Enrollments)
+            var imsClass = db.IMSClasses
+                .Where(c => c.SchoolOrgId == schoolId)
+                .Include(c => c.Enrollments)
                     .ThenInclude(e => e.User)
                         .ThenInclude(u => u.UserOrgs)
                             .ThenInclude(uo => uo.Org)
-                .Include(k => k.Enrollments)
+                .Include(c => c.Enrollments)
                     .ThenInclude(e => e.User)
                         .ThenInclude(u => u.UserAgents)
                             .ThenInclude(ua => ua.Agent)
-                .SingleOrDefault(k => k.Id == classId);
+                .SingleOrDefault(c => c.Id == classId);
 
-            if (klass == null)
+            if (imsClass == null)
             {
                 return NotFound();
             }
 
             serializer = new OneRosterSerializer("teachers");
             serializer.writer.WriteStartArray();
-            foreach (var enrollment in klass.Enrollments)
+            foreach (var enrollment in imsClass.Enrollments)
             {
                 var user = enrollment.User;
                 if (user.Role == Vocabulary.RoleType.teacher)

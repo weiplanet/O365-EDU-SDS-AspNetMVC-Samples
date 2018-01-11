@@ -38,8 +38,8 @@ namespace OneRosterProviderDemo.Models
         public User User { get; set; }
 
         [Required]
-        public string KlassId { get; set; }
-        public Klass Klass { get; set; }
+        public string IMSClassId { get; set; }
+        public IMSClass IMSClass { get; set; }
 
         [Required]
         public string SchoolOrgId { get; set; }
@@ -55,7 +55,7 @@ namespace OneRosterProviderDemo.Models
             User.AsJsonReference(writer, baseUrl);
 
             writer.WritePropertyName("class");
-            Klass.AsJsonReference(writer, baseUrl);
+            IMSClass.AsJsonReference(writer, baseUrl);
 
             writer.WritePropertyName("school");
             School.AsJsonReference(writer, baseUrl);
@@ -102,7 +102,7 @@ namespace OneRosterProviderDemo.Models
         public new void AsCsvRow(CsvWriter writer, bool bulk = true)
         {
             base.AsCsvRow(writer, bulk);
-            writer.WriteField(KlassId);
+            writer.WriteField(IMSClassId);
             writer.WriteField(SchoolOrgId);
             writer.WriteField(UserId);
             writer.WriteField(Role);

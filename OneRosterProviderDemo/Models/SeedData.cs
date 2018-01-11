@@ -140,16 +140,16 @@ namespace OneRosterProviderDemo.Models
                 }
             );
 
-            context.Klasses.AddRange(
-                new Klass()
+            context.IMSClasses.AddRange(
+                new IMSClass()
                 {
                     Id = "class-1",
                     UpdatedAt = DateTime.Now,
                     CreatedAt = DateTime.Now,
                     Status = Vocabulary.StatusType.active,
                     Title = "Advanced Caffeination Techniques",
-                    ClassCode = "CAF304-2017A",
-                    ClassType = Vocabulary.KlassType.scheduled,
+                    IMSClassCode = "CAF304-2017A",
+                    IMSClassType = Vocabulary.IMSClassType.scheduled,
                     Location = "Chemistry Lab 4",
                     CourseId = "course-1",
                     SchoolOrgId = "org-2",
@@ -158,15 +158,15 @@ namespace OneRosterProviderDemo.Models
                     Periods = new string[] { "1" },
                     Resources = new string[] { "resource-4" }
                 },
-                new Klass()
+                new IMSClass()
                 {
                     Id = "class-2",
                     UpdatedAt = DateTime.Now,
                     CreatedAt = DateTime.Now,
                     Status = Vocabulary.StatusType.active,
                     Title = "Advanced Caffeination Techniques",
-                    ClassCode = "CAF304-2017B",
-                    ClassType = Vocabulary.KlassType.scheduled,
+                    IMSClassCode = "CAF304-2017B",
+                    IMSClassType = Vocabulary.IMSClassType.scheduled,
                     Location = "Chemistry Lab 4",
                     CourseId = "course-1",
                     SchoolOrgId = "org-2",
@@ -187,7 +187,7 @@ namespace OneRosterProviderDemo.Models
                     Description = "You must drink at least one cup of coffee, no decaf",
                     AssignDate = DateTime.Parse("2017-03-01"),
                     DueDate = DateTime.Parse("2017-04-01"),
-                    KlassId = "class-1",
+                    IMSClassId = "class-1",
                     LineItemCategoryId = "category-1",
                     AcademicSessionId = "academic-session-1",
                     ResultValueMin = 0,
@@ -202,7 +202,7 @@ namespace OneRosterProviderDemo.Models
                     Title = "Intravenous Application",
                     AssignDate = DateTime.Parse("2017-04-05"),
                     DueDate = DateTime.Parse("2017-04-05"),
-                    KlassId = "class-1",
+                    IMSClassId = "class-1",
                     LineItemCategoryId = "category-2",
                     AcademicSessionId = "academic-session-1",
                     ResultValueMin = 0,
@@ -323,7 +323,7 @@ namespace OneRosterProviderDemo.Models
                     Status = Vocabulary.StatusType.active,
                     Role = Vocabulary.RoleType.teacher,
                     UserId = "user-2",
-                    KlassId = "class-1",
+                    IMSClassId = "class-1",
                     SchoolOrgId = "org-2"
                 },
                 new Enrollment()
@@ -334,7 +334,7 @@ namespace OneRosterProviderDemo.Models
                     Status = Vocabulary.StatusType.active,
                     Role = Vocabulary.RoleType.student,
                     UserId = "user-1",
-                    KlassId = "class-1",
+                    IMSClassId = "class-1",
                     SchoolOrgId = "org-2"
                 }
             );
@@ -366,23 +366,23 @@ namespace OneRosterProviderDemo.Models
                 }
             );
 
-            context.KlassAcademicSessions.AddRange(
-                new KlassAcademicSession()
+            context.IMSClassAcademicSessions.AddRange(
+                new IMSClassAcademicSession()
                 {
                     Id = "class-academic-session-1",
                     UpdatedAt = DateTime.Now,
                     CreatedAt = DateTime.Now,
                     Status = Vocabulary.StatusType.active,
-                    KlassId = "class-1",
+                    IMSClassId = "class-1",
                     AcademicSessionId = "academic-session-1"
                 },
-                new KlassAcademicSession()
+                new IMSClassAcademicSession()
                 {
                     Id = "class-academic-session-2",
                     UpdatedAt = DateTime.Now,
                     CreatedAt = DateTime.Now,
                     Status = Vocabulary.StatusType.active,
-                    KlassId = "class-2",
+                    IMSClassId = "class-2",
                     AcademicSessionId = "academic-session-1"
                 }
             );

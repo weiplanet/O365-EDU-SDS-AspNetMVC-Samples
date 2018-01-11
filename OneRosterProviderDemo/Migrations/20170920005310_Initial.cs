@@ -227,12 +227,12 @@ namespace OneRosterProviderDemo.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Klasses",
+                name: "IMSClasses",
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "TEXT", nullable: false),
-                    ClassCode = table.Column<string>(type: "TEXT", nullable: true),
-                    ClassType = table.Column<int>(type: "INTEGER", nullable: false),
+                    IMSClassCode = table.Column<string>(type: "TEXT", nullable: true),
+                    IMSClassType = table.Column<int>(type: "INTEGER", nullable: false),
                     CourseId = table.Column<string>(type: "TEXT", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "TEXT", nullable: false),
                     Location = table.Column<string>(type: "TEXT", nullable: true),
@@ -248,15 +248,15 @@ namespace OneRosterProviderDemo.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Klasses", x => x.Id);
+                    table.PrimaryKey("PK_IMSClasses", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Klasses_Courses_CourseId",
+                        name: "FK_IMSClasses_Courses_CourseId",
                         column: x => x.CourseId,
                         principalTable: "Courses",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Klasses_Orgs_SchoolOrgId",
+                        name: "FK_IMSClasses_Orgs_SchoolOrgId",
                         column: x => x.SchoolOrgId,
                         principalTable: "Orgs",
                         principalColumn: "Id",
@@ -271,7 +271,7 @@ namespace OneRosterProviderDemo.Migrations
                     BeginDate = table.Column<DateTime>(type: "TEXT", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "TEXT", nullable: false),
                     EndDate = table.Column<DateTime>(type: "TEXT", nullable: false),
-                    KlassId = table.Column<string>(type: "TEXT", nullable: false),
+                    IMSClassId = table.Column<string>(type: "TEXT", nullable: false),
                     Metadata = table.Column<string>(type: "TEXT", nullable: true),
                     Primary = table.Column<bool>(type: "INTEGER", nullable: true),
                     Role = table.Column<int>(type: "INTEGER", nullable: false),
@@ -284,9 +284,9 @@ namespace OneRosterProviderDemo.Migrations
                 {
                     table.PrimaryKey("PK_Enrollments", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Enrollments_Klasses_KlassId",
-                        column: x => x.KlassId,
-                        principalTable: "Klasses",
+                        name: "FK_Enrollments_IMSClasses_IMSClassId",
+                        column: x => x.IMSClassId,
+                        principalTable: "IMSClasses",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
@@ -304,30 +304,30 @@ namespace OneRosterProviderDemo.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "KlassAcademicSessions",
+                name: "IMSClassAcademicSessions",
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "TEXT", nullable: false),
                     AcademicSessionId = table.Column<string>(type: "TEXT", nullable: true),
                     CreatedAt = table.Column<DateTime>(type: "TEXT", nullable: false),
-                    KlassId = table.Column<string>(type: "TEXT", nullable: true),
+                    IMSClassId = table.Column<string>(type: "TEXT", nullable: true),
                     Metadata = table.Column<string>(type: "TEXT", nullable: true),
                     Status = table.Column<int>(type: "INTEGER", nullable: false),
                     UpdatedAt = table.Column<DateTime>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_KlassAcademicSessions", x => x.Id);
+                    table.PrimaryKey("PK_IMSClassAcademicSessions", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_KlassAcademicSessions_AcademicSessions_AcademicSessionId",
+                        name: "FK_IMSClassAcademicSessions_AcademicSessions_AcademicSessionId",
                         column: x => x.AcademicSessionId,
                         principalTable: "AcademicSessions",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_KlassAcademicSessions_Klasses_KlassId",
-                        column: x => x.KlassId,
-                        principalTable: "Klasses",
+                        name: "FK_IMSClassAcademicSessions_IMSClasses_IMSClassId",
+                        column: x => x.IMSClassId,
+                        principalTable: "IMSClasses",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
@@ -342,7 +342,7 @@ namespace OneRosterProviderDemo.Migrations
                     CreatedAt = table.Column<DateTime>(type: "TEXT", nullable: false),
                     Description = table.Column<string>(type: "TEXT", nullable: true),
                     DueDate = table.Column<DateTime>(type: "TEXT", nullable: false),
-                    KlassId = table.Column<string>(type: "TEXT", nullable: false),
+                    IMSClassId = table.Column<string>(type: "TEXT", nullable: false),
                     LineItemCategoryId = table.Column<string>(type: "TEXT", nullable: false),
                     Metadata = table.Column<string>(type: "TEXT", nullable: true),
                     ResultValueMax = table.Column<float>(type: "REAL", nullable: false),
@@ -361,9 +361,9 @@ namespace OneRosterProviderDemo.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_LineItems_Klasses_KlassId",
-                        column: x => x.KlassId,
-                        principalTable: "Klasses",
+                        name: "FK_LineItems_IMSClasses_IMSClassId",
+                        column: x => x.IMSClassId,
+                        principalTable: "IMSClasses",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
@@ -470,9 +470,9 @@ namespace OneRosterProviderDemo.Migrations
                 column: "SchoolYearAcademicSessionId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Enrollments_KlassId",
+                name: "IX_Enrollments_IMSClassId",
                 table: "Enrollments",
-                column: "KlassId");
+                column: "IMSClassId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Enrollments_SchoolOrgId",
@@ -485,23 +485,23 @@ namespace OneRosterProviderDemo.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_KlassAcademicSessions_AcademicSessionId",
-                table: "KlassAcademicSessions",
+                name: "IX_IMSClassAcademicSessions_AcademicSessionId",
+                table: "IMSClassAcademicSessions",
                 column: "AcademicSessionId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_KlassAcademicSessions_KlassId",
-                table: "KlassAcademicSessions",
-                column: "KlassId");
+                name: "IX_IMSClassAcademicSessions_IMSClassId",
+                table: "IMSClassAcademicSessions",
+                column: "IMSClassId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Klasses_CourseId",
-                table: "Klasses",
+                name: "IX_IMSClasses_CourseId",
+                table: "IMSClasses",
                 column: "CourseId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Klasses_SchoolOrgId",
-                table: "Klasses",
+                name: "IX_IMSClasses_SchoolOrgId",
+                table: "IMSClasses",
                 column: "SchoolOrgId");
 
             migrationBuilder.CreateIndex(
@@ -510,9 +510,9 @@ namespace OneRosterProviderDemo.Migrations
                 column: "AcademicSessionId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_LineItems_KlassId",
+                name: "IX_LineItems_IMSClassId",
                 table: "LineItems",
-                column: "KlassId");
+                column: "IMSClassId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_LineItems_LineItemCategoryId",
@@ -561,7 +561,7 @@ namespace OneRosterProviderDemo.Migrations
                 name: "Enrollments");
 
             migrationBuilder.DropTable(
-                name: "KlassAcademicSessions");
+                name: "IMSClassAcademicSessions");
 
             migrationBuilder.DropTable(
                 name: "OauthNonces");
@@ -585,7 +585,7 @@ namespace OneRosterProviderDemo.Migrations
                 name: "Users");
 
             migrationBuilder.DropTable(
-                name: "Klasses");
+                name: "IMSClasses");
 
             migrationBuilder.DropTable(
                 name: "LineItemCategories");

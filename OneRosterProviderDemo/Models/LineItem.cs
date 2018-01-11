@@ -35,8 +35,8 @@ namespace OneRosterProviderDemo.Models
         public DateTime DueDate { get; set; }
 
         [Required]
-        public string KlassId { get; set; }
-        public Klass Klass { get; set; }
+        public string IMSClassId { get; set; }
+        public IMSClass IMSClass { get; set; }
 
         [Required]
         public string LineItemCategoryId { get; set; }
@@ -76,7 +76,7 @@ namespace OneRosterProviderDemo.Models
             LineItemCategory.AsJsonReference(writer, baseUrl);
 
             writer.WritePropertyName("class");
-            Klass.AsJsonReference(writer, baseUrl);
+            IMSClass.AsJsonReference(writer, baseUrl);
 
             writer.WritePropertyName("gradingPeriod");
             AcademicSession.AsJsonReference(writer, baseUrl);
@@ -102,7 +102,7 @@ namespace OneRosterProviderDemo.Models
                 Description = (string)json["description"];
                 AssignDate = DateTime.Parse((string)json["assignDate"]);
                 DueDate = DateTime.Parse((string)json["dueDate"]);
-                KlassId = (string)json["class"]["sourcedId"];
+                IMSClassId = (string)json["class"]["sourcedId"];
                 LineItemCategoryId = (string)json["category"]["sourcedId"];
                 AcademicSessionId = (string)json["gradingPeriod"]["sourcedId"];
                 ResultValueMin = (float)json["resultValueMin"];
@@ -144,7 +144,7 @@ namespace OneRosterProviderDemo.Models
             writer.WriteField(Description);
             writer.WriteField(AssignDate.ToString("yyyy-MM-dd"));
             writer.WriteField(DueDate.ToString("yyyy-MM-dd"));
-            writer.WriteField(KlassId);
+            writer.WriteField(IMSClassId);
             writer.WriteField(LineItemCategoryId);
             writer.WriteField(AcademicSessionId);
             writer.WriteField(ResultValueMin);

@@ -7,7 +7,7 @@ using System;
 
 namespace OneRosterProviderDemo.Models
 {
-    public class KlassAcademicSession : BaseModel
+    public class IMSClassAcademicSession : BaseModel
     {
         internal override string ModelType()
         {
@@ -19,8 +19,8 @@ namespace OneRosterProviderDemo.Models
             throw new NotImplementedException();
         }
 
-        public string KlassId { get; set; }
-        public Klass Klass { get; set; }
+        public string IMSClassId { get; set; }
+        public IMSClass IMSClass { get; set; }
 
         public string AcademicSessionId { get; set; }
         public AcademicSession AcademicSession { get; set; }

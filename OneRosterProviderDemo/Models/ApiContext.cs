@@ -12,8 +12,8 @@ namespace OneRosterProviderDemo.Models
         public ApiContext(DbContextOptions<ApiContext> options) : base(options) { }
         public DbSet<AcademicSession> AcademicSessions { get; set; }
         public DbSet<Demographic> Demographics { get; set; }
-        public DbSet<Klass> Klasses { get; set; }
-        public DbSet<KlassAcademicSession> KlassAcademicSessions { get; set; }
+        public DbSet<IMSClass> IMSClasses { get; set; }
+        public DbSet<IMSClassAcademicSession> IMSClassAcademicSessions { get; set; }
         public DbSet<Course> Courses { get; set; }
         public DbSet<Enrollment> Enrollments { get; set; }
         public DbSet<LineItem> LineItems { get; set; }
@@ -29,13 +29,13 @@ namespace OneRosterProviderDemo.Models
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<Klass>()
+            modelBuilder.Entity<IMSClass>()
                 .Property("_grades");
-            modelBuilder.Entity<Klass>()
+            modelBuilder.Entity<IMSClass>()
                 .Property("_subjectCodes");
-            modelBuilder.Entity<Klass>()
+            modelBuilder.Entity<IMSClass>()
                 .Property("_periods");
-            modelBuilder.Entity<Klass>()
+            modelBuilder.Entity<IMSClass>()
                 .Property("_resources");
 
             modelBuilder.Entity<Course>()

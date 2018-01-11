@@ -26,7 +26,7 @@ namespace OneRosterProviderDemo.Controllers
         {
             IQueryable<Enrollment> enrollmentsQuery = db.Enrollments
                 .Include(e => e.User)
-                .Include(e => e.Klass)
+                .Include(e => e.IMSClass)
                 .Include(e => e.School);
             enrollmentsQuery = ApplyBinding(enrollmentsQuery);
             var enrollments = enrollmentsQuery.ToList();
@@ -48,7 +48,7 @@ namespace OneRosterProviderDemo.Controllers
         {
             var enrollment = db.Enrollments
                 .Include(e => e.User)
-                .Include(e => e.Klass)
+                .Include(e => e.IMSClass)
                 .Include(e => e.School)
                 .SingleOrDefault(a => a.Id == id);
 

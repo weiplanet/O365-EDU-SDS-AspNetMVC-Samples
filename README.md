@@ -185,7 +185,7 @@ Most of the OneRoster models have a corresponding model class in the `Models` di
 |------------------------|-------------------|
 | Base                   | BaseModel         |
 | Academic Session       | AcademicSession   |
-| Class                  | Klass             |
+| Class                  | IMSClass          |
 | Course                 | Course            |
 | Demographic Data       | { not supported } |
 | Enrollment             | Enrollment        |
@@ -198,14 +198,14 @@ Most of the OneRoster models have a corresponding model class in the `Models` di
 
 Additional models were created to support various needs:
 
-| EFCore Model         | Purpose                                         |
-|----------------------|-------------------------------------------------|
-| KlassAcademicSession | Join table for Class, Term (Academic Session)   |
-| UserAgent            | Join table for User, User                       |
-| UserOrg              | Join table for User, Org                        |
-| UserId               | Shape of user ids                               |
-| SeedData             | Holds seed data for initial database population |
-| OauthNonce           | Stores nonce values to disallow reuse           |
+| EFCore Model            | Purpose                                         |
+|-------------------------|-------------------------------------------------|
+| IMSClassAcademicSession | Join table for Class, Term (Academic Session)   |
+| UserAgent               | Join table for User, User                       |
+| UserOrg                 | Join table for User, Org                        |
+| UserId                  | Shape of user ids                               |
+| SeedData                | Holds seed data for initial database population |
+| OauthNonce              | Stores nonce values to disallow reuse           |
 
 ### Validation
 

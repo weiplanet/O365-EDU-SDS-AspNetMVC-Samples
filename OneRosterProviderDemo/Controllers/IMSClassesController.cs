@@ -15,9 +15,9 @@ using OneRosterProviderDemo.Serializers;
 namespace OneRosterProviderDemo.Controllers
 {
     [Route("ims/oneroster/v1p1/classes")]
-    public class KlassesController : BaseController
+    public class IMSClassesController : BaseController
     {
-        public KlassesController(ApiContext _db) : base(_db)
+        public IMSClassesController(ApiContext _db) : base(_db)
         {
         }
 
@@ -25,19 +25,19 @@ namespace OneRosterProviderDemo.Controllers
         [HttpGet]
         public IActionResult GetAllClasses()
         {
-            IQueryable<Klass> klassQuery = db.Klasses
-                .Include(k => k.KlassAcademicSessions)
+            IQueryable<IMSClass> imsClassQuery = db.IMSClasses
+                .Include(k => k.IMSClassAcademicSessions)
                     .ThenInclude(kas => kas.AcademicSession)
                 .Include(k => k.Course)
                 .Include(k => k.School);
-            klassQuery = ApplyBinding(klassQuery);
-            var klasses = klassQuery.ToList();
+            imsClassQuery = ApplyBinding(imsClassQuery);
+            var imsClasses = imsClassQuery.ToList();
 
             serializer = new OneRosterSerializer("classes");
             serializer.writer.WriteStartArray();
-            foreach (var klass in klasses)
+            foreach (var imsClass in imsClasses)
             {
-                klass.AsJson(serializer.writer, BaseUrl());
+                imsClass.AsJson(serializer.writer, BaseUrl());
             }
             serializer.writer.WriteEndArray();
 
@@ -48,19 +48,19 @@ namespace OneRosterProviderDemo.Controllers
         [HttpGet("{id}")]
         public IActionResult GetClass([FromRoute] string id)
         {
-            var klass = db.Klasses
-                .Include(k => k.KlassAcademicSessions)
+            var imsClass = db.IMSClasses
+                .Include(k => k.IMSClassAcademicSessions)
                     .ThenInclude(kas => kas.AcademicSession)
                 .Include(k => k.Course)
                 .Include(k => k.School)
                 .SingleOrDefault(k => k.Id == id);
 
-            if (klass == null)
+            if (imsClass == null)
             {
                 return NotFound();
             }
             serializer = new OneRosterSerializer("class");
-            klass.AsJson(serializer.writer, BaseUrl());
+            imsClass.AsJson(serializer.writer, BaseUrl());
             return JsonOk(serializer.Finish());
         }
 
@@ -68,7 +68,7 @@ namespace OneRosterProviderDemo.Controllers
         [HttpGet("{id}/students")]
         public IActionResult GetStudentsForClass([FromRoute] string id)
         {
-            if (db.Klasses.SingleOrDefault(k => k.Id == id) == null)
+            if (db.IMSClasses.SingleOrDefault(k => k.Id == id) == null)
             {
                 return NotFound();
             }
@@ -79,7 +79,7 @@ namespace OneRosterProviderDemo.Controllers
                 .Include(u => u.UserAgents)
                     .ThenInclude(ua => ua.Agent)
                 .Include(u => u.Enrollments)
-                .Where(u => u.Enrollments.Where(e => e.KlassId == id && e.Role == Vocabulary.RoleType.student).Count() > 0);
+                .Where(u => u.Enrollments.Where(e => e.IMSClassId == id && e.Role == Vocabulary.RoleType.student).Count() > 0);
             studentsQuery = ApplyBinding(studentsQuery);
             var students = studentsQuery.ToList();
 
@@ -98,7 +98,7 @@ namespace OneRosterProviderDemo.Controllers
         [HttpGet("{id}/teachers")]
         public IActionResult GetTeachersForClass([FromRoute] string id)
         {
-            if (db.Klasses.SingleOrDefault(k => k.Id == id) == null)
+            if (db.IMSClasses.SingleOrDefault(k => k.Id == id) == null)
             {
                 return NotFound();
             }
@@ -109,7 +109,7 @@ namespace OneRosterProviderDemo.Controllers
                 .Include(u => u.UserAgents)
                     .ThenInclude(ua => ua.Agent)
                 .Include(u => u.Enrollments)
-                .Where(u => u.Enrollments.Where(e => e.KlassId == id && e.Role == Vocabulary.RoleType.teacher).Count() > 0);
+                .Where(u => u.Enrollments.Where(e => e.IMSClassId == id && e.Role == Vocabulary.RoleType.teacher).Count() > 0);
             teachersQuery = ApplyBinding(teachersQuery);
             var teachers = teachersQuery.ToList();
 
@@ -128,13 +128,13 @@ namespace OneRosterProviderDemo.Controllers
         [HttpGet("{id}/lineItems")]
         public IActionResult GetLineItemsForClass([FromRoute] string id)
         {
-            if (db.Klasses.SingleOrDefault(k => k.Id == id) == null)
+            if (db.IMSClasses.SingleOrDefault(k => k.Id == id) == null)
             {
                 return NotFound();
             }
 
             IQueryable<LineItem> lineItemQuery = db.LineItems
-                .Where(li => li.KlassId == id)
+                .Where(li => li.IMSClassId == id)
                 .Include(li => li.LineItemCategory)
                 .Include(li => li.AcademicSession);
             lineItemQuery = ApplyBinding(lineItemQuery);
@@ -155,7 +155,7 @@ namespace OneRosterProviderDemo.Controllers
         [HttpGet("{id}/results")]
         public IActionResult GetResultsForClass([FromRoute] string id)
         {
-            if (db.Klasses.SingleOrDefault(k => k.Id == id) == null)
+            if (db.IMSClasses.SingleOrDefault(k => k.Id == id) == null)
             {
                 return NotFound();
             }
@@ -163,7 +163,7 @@ namespace OneRosterProviderDemo.Controllers
             IQueryable<Result> resultQuery = db.Results
                 .Include(r => r.Student)
                 .Include(r => r.LineItem)
-                .Where(r => r.LineItem.KlassId == id);
+                .Where(r => r.LineItem.IMSClassId == id);
             resultQuery = ApplyBinding(resultQuery);
             var results = resultQuery.ToList();
 
@@ -182,7 +182,7 @@ namespace OneRosterProviderDemo.Controllers
         [HttpGet("{id}/lineItems/{lineItemId}/results")]
         public IActionResult GetResultsForLineItemForClass([FromRoute] string id, [FromRoute] string lineItemId)
         {
-            if (db.Klasses.SingleOrDefault(k => k.Id == id) == null ||
+            if (db.IMSClasses.SingleOrDefault(k => k.Id == id) == null ||
                 db.LineItems.SingleOrDefault(li => li.Id == lineItemId) == null)
             {
                 return NotFound();
@@ -210,14 +210,14 @@ namespace OneRosterProviderDemo.Controllers
         [HttpGet("{id}/students/{studentId}/results")]
         public IActionResult GetResultsForStudentForClass([FromRoute] string id, [FromRoute] string studentId)
         {
-            if (db.Klasses.SingleOrDefault(k => k.Id == id) == null ||
+            if (db.IMSClasses.SingleOrDefault(k => k.Id == id) == null ||
                 db.Users.SingleOrDefault(u => u.Id == studentId) == null ||
-                db.Enrollments.SingleOrDefault(e => e.KlassId == id && e.UserId == studentId && e.Role == Vocabulary.RoleType.student) == null)
+                db.Enrollments.SingleOrDefault(e => e.IMSClassId == id && e.UserId == studentId && e.Role == Vocabulary.RoleType.student) == null)
             {
                 return NotFound();
             }
             IQueryable<Result> resultQuery = db.Results
-                .Where(r => r.StudentUserId == studentId && r.LineItem.KlassId == id)
+                .Where(r => r.StudentUserId == studentId && r.LineItem.IMSClassId == id)
                 .Include(r => r.Student)
                 .Include(r => r.LineItem);
             resultQuery = ApplyBinding(resultQuery);
@@ -238,11 +238,11 @@ namespace OneRosterProviderDemo.Controllers
         [HttpGet("{id}/resources")]
         public IActionResult GetResourcesForClass([FromRoute] string id)
         {
-            var klass = db.Klasses
+            var imsClass = db.IMSClasses
                 .Include(k => k.Course)
                 .SingleOrDefault(k => k.Id == id);
 
-            if (klass == null)
+            if (imsClass == null)
             {
                 return NotFound();
             }
@@ -250,9 +250,9 @@ namespace OneRosterProviderDemo.Controllers
             serializer = new Serializers.OneRosterSerializer("resources");
             serializer.writer.WriteStartArray();
 
-            if (klass.Course != null && klass.Course.Resources != null)
+            if (imsClass.Course != null && imsClass.Course.Resources != null)
             {
-                foreach (var resourceId in klass.Course.Resources)
+                foreach (var resourceId in imsClass.Course.Resources)
                 {
                     var resource = db.Resources
                         .SingleOrDefault(r => r.Id == resourceId);
@@ -260,9 +260,9 @@ namespace OneRosterProviderDemo.Controllers
                 }
             }
 
-            if (klass.Resources != null)
+            if (imsClass.Resources != null)
             {
-                foreach (var resourceId in klass.Resources)
+                foreach (var resourceId in imsClass.Resources)
                 {
                     var resource = db.Resources
                         .SingleOrDefault(r => r.Id == resourceId);

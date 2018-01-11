@@ -69,12 +69,12 @@ namespace OneRosterProviderDemo.Controllers
             var student = db.Users
                 .Include(u => u.UserOrgs).ThenInclude(uo => uo.Org)
                 .Include(u => u.UserAgents).ThenInclude(ua => ua.Agent)
-                .Include(u => u.Enrollments).ThenInclude(e => e.Klass)
-                    .ThenInclude(k => k.KlassAcademicSessions)
+                .Include(u => u.Enrollments).ThenInclude(e => e.IMSClass)
+                    .ThenInclude(k => k.IMSClassAcademicSessions)
                         .ThenInclude(kas => kas.AcademicSession)
-                .Include(u => u.Enrollments).ThenInclude(e => e.Klass)
+                .Include(u => u.Enrollments).ThenInclude(e => e.IMSClass)
                     .ThenInclude(k => k.Course)
-                .Include(u => u.Enrollments).ThenInclude(e => e.Klass)
+                .Include(u => u.Enrollments).ThenInclude(e => e.IMSClass)
                     .ThenInclude(k => k.School)
                 .SingleOrDefault(u => u.Id == id && u.Role == Vocabulary.RoleType.student);
 
@@ -87,7 +87,7 @@ namespace OneRosterProviderDemo.Controllers
             serializer.writer.WriteStartArray();
             foreach(var enrollment in student.Enrollments)
             {
-                enrollment.Klass.AsJson(serializer.writer, BaseUrl());
+                enrollment.IMSClass.AsJson(serializer.writer, BaseUrl());
             }
             serializer.writer.WriteEndArray();
             return JsonOk(serializer.Finish());
