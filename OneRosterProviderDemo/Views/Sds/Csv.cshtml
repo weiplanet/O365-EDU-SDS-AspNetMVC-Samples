@@ -7,4 +7,7 @@
 <h2>@ViewData["Title"]</h2>
 <h3>@ViewData["Message"]</h3>
 
-<p>Your CSV sync profile has been set up.  You should see school data objects populated on your tenant soon.</p>
+@if ((string)ViewData["Result"] != "failed")
+{
+    <p>Your CSV sync profile has been set up.  You should see school data objects populated on your tenant soon.</p>
+}

@@ -56,6 +56,14 @@ namespace OneRosterProviderDemo.Controllers
             }
 
             var profile = await GetProfileAsync("csv");
+            if (profile["error"] != null)
+            {
+                var err = profile["error"]["message"];
+                ViewBag.Message = $"CSV connector failed with error \"{err}\"";
+                ViewBag.Result = "error";
+                return View("Csv");
+            }
+
             var profileId = (string)profile["id"];
             var uploadSas = await manager.GetCsvUploadUrl(profileId);
 
@@ -63,8 +71,16 @@ namespace OneRosterProviderDemo.Controllers
             await StartCsvSyncSafely(profileId);
 
             profile = await GetProfileAsync("csv");
-            ViewBag.Message = $"CSV connector has id {profile["id"]} and status {profile["state"]}";
+            if (profile["error"] != null)
+            {
+                var err = profile["error"]["message"];
+                ViewBag.Message = $"CSV connector failed with error \"{err}\"";
+                ViewBag.Result = "error";
+                return View("Csv");
+            }
 
+            ViewBag.Message = $"CSV connector has id {profile["id"]} and status {profile["state"]}";
+            ViewBag.Result = "success";
             return View("Csv");
         }
 
@@ -76,7 +92,17 @@ namespace OneRosterProviderDemo.Controllers
                 manager = new SdsManager(await GetAccessTokenAsync());
             }
             var profile = await GetProfileAsync("rest");
-            ViewBag.Message = $"OneRoster REST connector has id {profile["id"]} and status {profile["state"]}";
+            if(profile["error"] != null)
+            {
+                var err = profile["error"]["message"];
+                ViewBag.Message = $"OneRoster REST connector failed with error \"{err}\"";
+                ViewBag.Result = "error";
+            }
+            else
+            {
+                ViewBag.Message = $"OneRoster REST connector has id {profile["id"]} and status {profile["state"]}";
+                ViewBag.Result = "success";
+            }
             return View("Rest");
         }
 
@@ -96,7 +122,8 @@ namespace OneRosterProviderDemo.Controllers
             }
 
             // create new profile
-            HttpResponseMessage res2 = await manager.PostProfileAsync(await GenerateProfileAsync(profileType));
+            var generatedProfile = await GenerateProfileAsync(profileType);
+            HttpResponseMessage res2 = await manager.PostProfileAsync(generatedProfile);
             return JObject.Parse(await res2.Content.ReadAsStringAsync());
         }
 
@@ -158,15 +185,6 @@ namespace OneRosterProviderDemo.Controllers
                 else
                 {
                     writer.WriteValue("#microsoft.graph.educationcsvdataprovider");
-
-                    writer.WritePropertyName("connectionUrl");
-                    writer.WriteValue($"{(Request.IsHttps ? "https" : "http")}://{Request.Host}/ims/oneroster/v1p1");
-
-                    writer.WritePropertyName("clientId");
-                    writer.WriteValue("contoso");
-
-                    writer.WritePropertyName("clientSecret");
-                    writer.WriteValue("contoso-secret");
                 }
 
                 writer.WriteEndObject();
