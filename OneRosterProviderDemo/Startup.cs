@@ -46,7 +46,8 @@ namespace OneRosterProviderDemo
                 opts.SaveTokens = true;
             });
             services.AddDbContext<ApiContext>(
-                options => options.UseSqlite(Configuration.GetConnectionString("OneRosterProviderDemoEF"))
+                //options => options.UseSqlite(Configuration.GetConnectionString("OneRosterProviderDemoEF"))
+                options => options.UseSqlServer(Configuration.GetConnectionString("OneRosterProviderDemoEF"))
             );
             services.AddMvc();
         }
