@@ -1,3 +1,21 @@
+---
+topic: sample
+products:
+- Office 365
+languages:
+- C#
+- ASP.NET
+extensions:
+  contentType: samples
+  technologies:
+  - Microsoft Graph
+  services:
+  - Office 365
+  - Education
+  createdDate: 9/20/2017 5:37:15 PM
+  scenarios:
+  - Eduation
+---
 ﻿# OneRoster REST Provider Sample
 
 This project implements OneRoster v1.1 behaviors.
