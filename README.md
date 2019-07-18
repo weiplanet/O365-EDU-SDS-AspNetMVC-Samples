@@ -1,10 +1,10 @@
 ---
 topic: sample
 products:
-- Office 365
+- office-365
 languages:
-- C#
-- ASP.NET
+- csharp
+- aspx
 extensions:
   contentType: samples
   technologies:
