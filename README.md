@@ -16,8 +16,10 @@ extensions:
   createdDate: 9/20/2017 5:37:15 PM
   scenarios:
   - Eduation
+description: "This project implements OneRoster v1.1 behaviors."
 ---
-﻿# OneRoster REST Provider Sample
+
+# OneRoster REST Provider Sample
 
 This project implements OneRoster v1.1 behaviors.
 
@@ -348,7 +350,7 @@ Currently, the following behaviors are not up to spec:
 * Questions about ASP Core development in general should be posted to [Stack Overflow](https://stackoverflow.com/questions/tagged/asp.net-core). Make sure that your questions or comments are tagged with [asp.net-core].
 * Questions about OneRoster development in general should be posted to [IMS Global](https://www.imsglobal.org/forums/ims-glc-public-forums-and-resources/oneroster-public-forum).
 
-# Contributing
+## Contributing
 
 This project welcomes contributions and suggestions.  Most contributions require you to agree to a
 Contributor License Agreement (CLA) declaring that you have the right to, and actually do, grant us
